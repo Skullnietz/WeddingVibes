@@ -72,9 +72,13 @@ export function registerOAuthRoutes(app: Express) {
       res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
 
       res.redirect(302, "/");
-    } catch (error) {
-      console.error("[OAuth] Callback failed", error);
-      res.status(500).json({ error: "OAuth callback failed" });
+    } catch (error: any) {
+      console.error("[OAuth] Callback failed", error?.response?.data || error);
+      res.status(500).json({
+        error: "OAuth callback failed",
+        message: error?.message || "Unknown error",
+        details: error?.response?.data || error?.stack || "No additional details"
+      });
     }
   });
 }
