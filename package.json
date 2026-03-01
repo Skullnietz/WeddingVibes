@@ -4,7 +4,7 @@
   "type": "module",
   "license": "MIT",
   "engines": {
-    "node": "18.17.0"
+    "node": "18.20.8"
   },
   "scripts": {
     "dev": "npx cross-env NODE_ENV=development npx tsx server/_core/index.ts",
