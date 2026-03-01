@@ -8,6 +8,13 @@
       "when": 1772069851702,
       "tag": "0000_loving_blur",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1772305244236,
+      "tag": "0001_milky_cerise",
+      "breakpoints": true
     }
   ]
 }

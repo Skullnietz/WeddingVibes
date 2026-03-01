@@ -6,6 +6,7 @@ import { ArrowLeft, Play, Pause, ChevronLeft, ChevronRight, Grid3X3, Maximize2 }
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import CustomAudioPlayer from "@/components/CustomAudioPlayer";
+import SongRequestBox from "@/components/SongRequestBox";
 
 type ViewMode = "grid" | "slideshow";
 
@@ -195,6 +196,11 @@ export default function Gallery() {
               </p>
             </div>
           )}
+
+          {/* Song Request Box */}
+          <div className="mt-16">
+            <SongRequestBox />
+          </div>
         </div>
       )}
 

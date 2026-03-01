@@ -1,7 +1,7 @@
 import { eq, desc } from "drizzle-orm";
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
-import { InsertUser, users, rsvps, companions, weddingPhotos, preWeddingPhotos, invitations, InsertRSVP, InsertCompanion, InsertWeddingPhoto, InsertPreWeddingPhoto } from "../drizzle/schema";
+import { InsertUser, users, rsvps, companions, weddingPhotos, preWeddingPhotos, invitations, songRequests, InsertRSVP, InsertCompanion, InsertWeddingPhoto, InsertPreWeddingPhoto, InsertSongRequest } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -157,4 +157,16 @@ export async function getInvitationBySlug(slug: string) {
   if (!db) return undefined;
   const result = await db.select().from(invitations).where(eq(invitations.slug, slug)).limit(1);
   return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createSongRequest(requestData: InsertSongRequest) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.insert(songRequests).values(requestData);
+}
+
+export async function getSongRequests() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(songRequests).orderBy(desc(songRequests.createdAt));
 }

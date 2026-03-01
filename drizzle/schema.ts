@@ -114,3 +114,19 @@ export const invitations = sqliteTable("invitations", {
 
 export type Invitation = typeof invitations.$inferSelect;
 export type InsertInvitation = typeof invitations.$inferInsert;
+
+/**
+ * Spotify Song Requests
+ */
+export const songRequests = sqliteTable("songRequests", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  trackId: text("trackId").notNull(),
+  title: text("title").notNull(),
+  artist: text("artist").notNull(),
+  coverUrl: text("coverUrl"),
+  requestedBy: text("requestedBy"),
+  createdAt: integer("createdAt", { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
+});
+
+export type SongRequest = typeof songRequests.$inferSelect;
+export type InsertSongRequest = typeof songRequests.$inferInsert;
