@@ -4,6 +4,8 @@ import * as db from "../db";
 import { getSessionCookieOptions } from "./cookies";
 import { sdk } from "./sdk";
 
+import axios from "axios";
+
 function getQueryParam(req: Request, key: string): string | undefined {
   const value = req.query[key];
   return typeof value === "string" ? value : undefined;
@@ -20,23 +22,48 @@ export function registerOAuthRoutes(app: Express) {
     }
 
     try {
-      const tokenResponse = await sdk.exchangeCodeForToken(code, state);
-      const userInfo = await sdk.getUserInfo(tokenResponse.accessToken);
+      const clientId = process.env.GOOGLE_CLIENT_ID;
+      const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+      const redirectUri = typeof state === "string" ? atob(state) : "";
 
-      if (!userInfo.openId) {
-        res.status(400).json({ error: "openId missing from user info" });
+      if (!clientId || !clientSecret) {
+        throw new Error("Missing Google OAuth Credentials in Environment");
+      }
+
+      // 1. Exchange code for Google Access Token
+      const tokenResponse = await axios.post("https://oauth2.googleapis.com/token", {
+        client_id: clientId,
+        client_secret: clientSecret,
+        code,
+        grant_type: "authorization_code",
+        redirect_uri: redirectUri,
+      });
+
+      const accessToken = tokenResponse.data.access_token;
+
+      // 2. Fetch User Profile from Google
+      const userInfoResponse = await axios.get("https://www.googleapis.com/oauth2/v2/userinfo", {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+
+      const userInfo = userInfoResponse.data;
+
+      if (!userInfo.id) {
+        res.status(400).json({ error: "id missing from Google user info" });
         return;
       }
 
+      // 3. Upsert into database
       await db.upsertUser({
-        openId: userInfo.openId,
+        openId: userInfo.id,
         name: userInfo.name || null,
         email: userInfo.email ?? null,
-        loginMethod: userInfo.loginMethod ?? userInfo.platform ?? null,
+        loginMethod: "google",
         lastSignedIn: new Date(),
       });
 
-      const sessionToken = await sdk.createSessionToken(userInfo.openId, {
+      // 4. Create local session
+      const sessionToken = await sdk.createSessionToken(userInfo.id, {
         name: userInfo.name || "",
         expiresInMs: ONE_YEAR_MS,
       });
