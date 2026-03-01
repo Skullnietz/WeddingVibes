@@ -8,7 +8,8 @@ export const APP_LOGO = "https://placehold.co/128x128/6B4C9A/F5F1E8?text=M%26G";
 export const WEDDING_HASHTAG = "#MiriamGonzaloBoda2025";
 
 export const getLoginUrl = () => {
-  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  // Hardcoded because Vite strips out non-VITE_ variables during Hostinger build
+  const clientId = "965686923942-88ljk44ufuh4rqkrgmu7h3jvuvrj8dcu.apps.googleusercontent.com";
   const redirectUri = `${window.location.origin}/api/oauth/callback`;
   const state = btoa(redirectUri);
 
