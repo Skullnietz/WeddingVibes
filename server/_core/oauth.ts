@@ -22,12 +22,12 @@ export function registerOAuthRoutes(app: Express) {
     }
 
     try {
-      const clientId = process.env.GOOGLE_CLIENT_ID;
-      const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+      const clientId = process.env.GOOGLE_CLIENT_ID || process.env.VITE_GOOGLE_CLIENT_ID;
+      const clientSecret = process.env.GOOGLE_CLIENT_SECRET || process.env.VITE_GOOGLE_CLIENT_SECRET;
       const redirectUri = typeof state === "string" ? atob(state) : "";
 
       if (!clientId || !clientSecret) {
-        throw new Error("Missing Google OAuth Credentials in Environment");
+        throw new Error(`Missing Google OAuth Credentials. ID exists: ${!!clientId}, Secret exists: ${!!clientSecret}. Check Hostinger panel.`);
       }
 
       // 1. Exchange code for Google Access Token
