@@ -4,15 +4,34 @@ import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, rsvps, companions, weddingPhotos, preWeddingPhotos, invitations, songRequests, InsertRSVP, InsertCompanion, InsertWeddingPhoto, InsertPreWeddingPhoto, InsertSongRequest } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
-let _db: ReturnType<typeof drizzle> | null = null;
+let _db: any = null;
 let _pool: mysql.Pool | null = null;
 
 // Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
-  if (!_db && process.env.DATABASE_URL) {
+  if (!_db) {
+    const dbUrl = process.env.DATABASE_URL;
+    const dbHost = process.env.DB_HOST;
+    const dbUser = process.env.DB_USER;
+    const dbPassword = process.env.DB_PASSWORD;
+    const dbName = process.env.DB_NAME;
+
     try {
-      _pool = mysql.createPool(process.env.DATABASE_URL);
-      _db = drizzle(_pool);
+      if (dbHost && dbUser && dbPassword && dbName) {
+        _pool = mysql.createPool({
+          host: dbHost,
+          user: dbUser,
+          password: dbPassword,
+          database: dbName,
+          port: 3306,
+        });
+        _db = drizzle(_pool);
+      } else if (dbUrl) {
+        _pool = mysql.createPool(dbUrl);
+        _db = drizzle(_pool);
+      } else {
+        console.warn("[Database] No connection credentials found. Please set DB_HOST, DB_USER, DB_PASSWORD, and DB_NAME.");
+      }
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
