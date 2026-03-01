@@ -1,4 +1,4 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { int, mysqlTable, varchar, text, boolean, timestamp } from "drizzle-orm/mysql-core";
 import { relations } from "drizzle-orm";
 
 /**
@@ -6,16 +6,16 @@ import { relations } from "drizzle-orm";
  * Extend this file with additional tables as your product grows.
  * Columns use camelCase to match both database fields and generated types.
  */
-export const users = sqliteTable("users", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  openId: text("openId").notNull().unique(),
-  name: text("name"),
-  email: text("email"),
-  loginMethod: text("loginMethod"),
-  role: text("role").$type<"user" | "admin">().default("user").notNull(),
-  createdAt: integer("createdAt", { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
-  updatedAt: integer("updatedAt", { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
-  lastSignedIn: integer("lastSignedIn", { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
+export const users = mysqlTable("users", {
+  id: int("id").primaryKey().autoincrement(),
+  openId: varchar("openId", { length: 255 }).notNull().unique(),
+  name: varchar("name", { length: 255 }),
+  email: varchar("email", { length: 255 }),
+  loginMethod: varchar("loginMethod", { length: 50 }),
+  role: varchar("role", { length: 20 }).$type<"user" | "admin">().default("user").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
 });
 
 export type User = typeof users.$inferSelect;
@@ -24,20 +24,20 @@ export type InsertUser = typeof users.$inferInsert;
 /**
  * RSVP table for wedding guest confirmations
  */
-export const rsvps = sqliteTable("rsvps", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  userId: integer("userId").notNull(),
-  guestName: text("guestName").notNull(),
-  email: text("email"),
-  phone: text("phone"),
-  isAttending: integer("isAttending", { mode: 'boolean' }).notNull().default(false),
-  numberOfCompanions: integer("numberOfCompanions").default(0),
+export const rsvps = mysqlTable("rsvps", {
+  id: int("id").primaryKey().autoincrement(),
+  userId: int("userId").notNull(),
+  guestName: varchar("guestName", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }),
+  phone: varchar("phone", { length: 50 }),
+  isAttending: boolean("isAttending").notNull().default(false),
+  numberOfCompanions: int("numberOfCompanions").default(0),
   dietaryRestrictions: text("dietaryRestrictions"),
-  needsTransport: integer("needsTransport", { mode: 'boolean' }).default(false),
-  transportFrom: text("transportFrom"),
+  needsTransport: boolean("needsTransport").default(false),
+  transportFrom: varchar("transportFrom", { length: 255 }),
   specialRequests: text("specialRequests"),
-  createdAt: integer("createdAt", { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
-  updatedAt: integer("updatedAt", { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
 export type RSVP = typeof rsvps.$inferSelect;
@@ -46,12 +46,12 @@ export type InsertRSVP = typeof rsvps.$inferInsert;
 /**
  * Companions table for RSVP guests
  */
-export const companions = sqliteTable("companions", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  rsvpId: integer("rsvpId").notNull(),
-  name: text("name").notNull(),
+export const companions = mysqlTable("companions", {
+  id: int("id").primaryKey().autoincrement(),
+  rsvpId: int("rsvpId").notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
   dietaryRestrictions: text("dietaryRestrictions"),
-  createdAt: integer("createdAt", { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
 export type Companion = typeof companions.$inferSelect;
@@ -74,14 +74,14 @@ export const companionsRelations = relations(companions, ({ one }) => ({
 /**
  * Wedding photos gallery
  */
-export const weddingPhotos = sqliteTable("weddingPhotos", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  title: text("title"),
+export const weddingPhotos = mysqlTable("weddingPhotos", {
+  id: int("id").primaryKey().autoincrement(),
+  title: varchar("title", { length: 255 }),
   description: text("description"),
-  imageUrl: text("imageUrl").notNull(),
-  category: text("category").default("general"),
-  displayOrder: integer("displayOrder").default(0),
-  createdAt: integer("createdAt", { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
+  imageUrl: varchar("imageUrl", { length: 1024 }).notNull(),
+  category: varchar("category", { length: 100 }).default("general"),
+  displayOrder: int("displayOrder").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
 export type WeddingPhoto = typeof weddingPhotos.$inferSelect;
@@ -90,13 +90,13 @@ export type InsertWeddingPhoto = typeof weddingPhotos.$inferInsert;
 /**
  * Pre-wedding photos gallery
  */
-export const preWeddingPhotos = sqliteTable("preWeddingPhotos", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  title: text("title"),
+export const preWeddingPhotos = mysqlTable("preWeddingPhotos", {
+  id: int("id").primaryKey().autoincrement(),
+  title: varchar("title", { length: 255 }),
   description: text("description"),
-  imageUrl: text("imageUrl").notNull(),
-  displayOrder: integer("displayOrder").default(0),
-  createdAt: integer("createdAt", { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
+  imageUrl: varchar("imageUrl", { length: 1024 }).notNull(),
+  displayOrder: int("displayOrder").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
 export type PreWeddingPhoto = typeof preWeddingPhotos.$inferSelect;
@@ -105,11 +105,11 @@ export type InsertPreWeddingPhoto = typeof preWeddingPhotos.$inferInsert;
 /**
  * Personalized Invitations
  */
-export const invitations = sqliteTable("invitations", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  slug: text("slug").notNull().unique(),
-  guestName: text("guestName").notNull(),
-  createdAt: integer("createdAt", { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
+export const invitations = mysqlTable("invitations", {
+  id: int("id").primaryKey().autoincrement(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  guestName: varchar("guestName", { length: 255 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
 export type Invitation = typeof invitations.$inferSelect;
@@ -118,14 +118,14 @@ export type InsertInvitation = typeof invitations.$inferInsert;
 /**
  * Spotify Song Requests
  */
-export const songRequests = sqliteTable("songRequests", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  trackId: text("trackId").notNull(),
-  title: text("title").notNull(),
-  artist: text("artist").notNull(),
-  coverUrl: text("coverUrl"),
-  requestedBy: text("requestedBy"),
-  createdAt: integer("createdAt", { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
+export const songRequests = mysqlTable("songRequests", {
+  id: int("id").primaryKey().autoincrement(),
+  trackId: varchar("trackId", { length: 255 }).notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  artist: varchar("artist", { length: 255 }).notNull(),
+  coverUrl: varchar("coverUrl", { length: 1024 }),
+  requestedBy: varchar("requestedBy", { length: 255 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
 export type SongRequest = typeof songRequests.$inferSelect;
