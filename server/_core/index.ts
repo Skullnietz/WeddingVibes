@@ -48,8 +48,6 @@ async function startServer() {
       createContext,
     })
   );
-  // Default to production if not explicitly set to development to prevent accidental ESM Vite crashes
-  process.env.NODE_ENV = process.env.NODE_ENV || "production";
   // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
