@@ -40,6 +40,12 @@ export async function getDb() {
   return _db;
 }
 
+function toMySQLDate(d: Date = new Date()) {
+  const date = new Date(d);
+  date.setMilliseconds(0);
+  return date;
+}
+
 export async function upsertUser(user: InsertUser): Promise<void> {
   if (!user.openId) {
     throw new Error("User openId is required for upsert");
@@ -54,8 +60,12 @@ export async function upsertUser(user: InsertUser): Promise<void> {
   try {
     const values: InsertUser = {
       openId: user.openId,
+      createdAt: toMySQLDate(),
+      updatedAt: toMySQLDate(),
     };
-    const updateSet: Record<string, unknown> = {};
+    const updateSet: Record<string, unknown> = {
+      updatedAt: toMySQLDate(),
+    };
 
     const textFields = ["name", "email", "loginMethod"] as const;
     type TextField = (typeof textFields)[number];
@@ -71,8 +81,9 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     textFields.forEach(assignNullable);
 
     if (user.lastSignedIn !== undefined) {
-      values.lastSignedIn = user.lastSignedIn;
-      updateSet.lastSignedIn = user.lastSignedIn;
+      const dbDate = toMySQLDate(user.lastSignedIn as Date);
+      values.lastSignedIn = dbDate;
+      updateSet.lastSignedIn = dbDate;
     }
     if (user.role !== undefined) {
       values.role = user.role;
@@ -83,11 +94,11 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     }
 
     if (!values.lastSignedIn) {
-      values.lastSignedIn = new Date();
+      values.lastSignedIn = toMySQLDate();
     }
 
-    if (Object.keys(updateSet).length === 0) {
-      updateSet.lastSignedIn = new Date();
+    if (Object.keys(updateSet).length === 0 || updateSet.lastSignedIn === undefined) {
+      updateSet.lastSignedIn = toMySQLDate();
     }
 
     await db.insert(users).values(values).onDuplicateKeyUpdate({
