@@ -1,4 +1,9 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+import path from "path";
+
+// @ts-ignore
+const _dirname = typeof __dirname !== 'undefined' ? __dirname : import.meta.dirname;
+dotenv.config({ path: path.resolve(_dirname, '../.env') });
 import express from "express";
 import { createServer } from "http";
 import net from "net";
