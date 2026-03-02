@@ -24,6 +24,7 @@ export async function getDb() {
           password: dbPassword,
           database: dbName,
           port: 3306,
+          charset: "utf8mb4",
         });
         _db = drizzle(_pool);
       } else if (dbUrl) {
