@@ -55,9 +55,9 @@ export function serveStatic(app: Express) {
   const distPath =
     process.env.NODE_ENV === "development"
       ? path.resolve(_dirname, "../..", "dist", "public")
-      : path.resolve(_dirname, "public");
+      : path.resolve(process.cwd(), "dist", "public");
   if (!fs.existsSync(distPath)) {
-    console.error(
+    console.warn(
       `Could not find the build directory: ${distPath}, make sure to build the client first`
     );
   }
