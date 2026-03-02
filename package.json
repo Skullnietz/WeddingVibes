@@ -10,7 +10,7 @@
     "dev": "npx cross-env NODE_ENV=development npx tsx server/_core/index.ts",
     "build": "vite build && node build.cjs",
     "postinstall": "node chmod-esbuild.cjs && npm run build",
-    "start": "npx cross-env NODE_ENV=production node dist/index.js",
+    "start": "npx cross-env NODE_ENV=production node dist/index.cjs",
     "check": "tsc --noEmit",
     "format": "prettier --write .",
     "test": "vitest run",

@@ -4,8 +4,8 @@ build({
     entryPoints: ['server/_core/index.ts'],
     bundle: true,
     platform: 'node',
-    format: 'esm',
-    outdir: 'dist',
+    format: 'cjs',
+    outfile: 'dist/index.cjs',
     packages: 'external',
     /** 
      * Bundle these specific packages into the final index.js file instead of 
