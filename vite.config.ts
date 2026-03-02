@@ -7,17 +7,17 @@ import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 // @ts-ignore
 const _dirname = typeof __dirname !== 'undefined' ? __dirname : import.meta.dirname;
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(async ({ mode }) => {
   const isProduction = process.env.NODE_ENV === "production" || mode === "production";
   const plugins = [react(), vitePluginManusRuntime()];
 
-  if (!isProduction) {
-    try {
-      const tailwindcss = require("@tailwindcss/vite").default || require("@tailwindcss/vite");
-      plugins.push(tailwindcss());
-    } catch (e) {
-      console.warn("Could not load @tailwindcss/vite plugin in this environment.");
-    }
+  try {
+    const tailwindModule = await import("@tailwindcss/vite");
+    const tailwindcss = tailwindModule.default || tailwindModule;
+    plugins.push(tailwindcss());
+
+  } catch (e) {
+    console.warn("Could not load @tailwindcss/vite plugin in this environment.");
   }
 
   return {
