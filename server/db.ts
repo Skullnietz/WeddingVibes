@@ -1,4 +1,4 @@
-import { eq, desc, sql } from "drizzle-orm";
+import { eq, desc, sql, and } from "drizzle-orm";
 import mysql from "mysql2/promise";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, rsvps, companions, weddingPhotos, preWeddingPhotos, invitations, songRequests, InsertRSVP, InsertCompanion, InsertWeddingPhoto, InsertPreWeddingPhoto, InsertSongRequest } from "../drizzle/schema";
@@ -145,9 +145,13 @@ export async function getWeddingPhotos(category?: string) {
   const db = await getDb();
   if (!db) return [];
   if (category) {
-    return await db.select().from(weddingPhotos).where(eq(weddingPhotos.category, category)).orderBy(desc(weddingPhotos.displayOrder));
+    return await db.select().from(weddingPhotos)
+      .where(and(eq(weddingPhotos.category, category), eq(weddingPhotos.status, 'approved')))
+      .orderBy(desc(weddingPhotos.displayOrder));
   }
-  return await db.select().from(weddingPhotos).orderBy(desc(weddingPhotos.displayOrder));
+  return await db.select().from(weddingPhotos)
+    .where(eq(weddingPhotos.status, 'approved'))
+    .orderBy(desc(weddingPhotos.displayOrder));
 }
 
 export async function createWeddingPhoto(photoData: InsertWeddingPhoto) {

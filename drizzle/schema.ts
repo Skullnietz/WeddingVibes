@@ -80,6 +80,8 @@ export const weddingPhotos = mysqlTable("weddingPhotos", {
   description: text("description"),
   imageUrl: varchar("imageUrl", { length: 1024 }).notNull(),
   category: varchar("category", { length: 100 }).default("general"),
+  status: varchar("status", { length: 20 }).$type<"pending" | "approved" | "rejected">().default("pending").notNull(),
+  uploadedBy: int("uploadedBy"), // Nullable because admins might upload official photos directly without a strict user tie, or we can tie it to admin UI
   displayOrder: int("displayOrder").default(0),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
