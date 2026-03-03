@@ -575,12 +575,20 @@ export default function MyGallery() {
 
                                 <Button
                                     variant="outline"
-                                    size="icon"
-                                    className={`absolute top-4 right-4 z-20 transition-all duration-300 rounded-full backdrop-blur-md border-white/30 shadow-lg ${showPurchaseLinks ? 'bg-white text-black hover:scale-110' : 'bg-black/40 text-white hover:bg-black/60 hover:scale-110'}`}
+                                    className={`absolute top-4 right-4 z-20 transition-all duration-300 rounded-full backdrop-blur-md border-white/30 shadow-lg flex items-center gap-2 font-serif px-5 py-5 ${showPurchaseLinks ? 'bg-white text-black hover:scale-105' : 'bg-black/40 text-white hover:bg-black/60 hover:scale-105'}`}
                                     onClick={() => setShowPurchaseLinks(!showPurchaseLinks)}
-                                    title="Opciones de compra"
                                 >
-                                    <HelpCircle size={24} />
+                                    {showPurchaseLinks ? (
+                                        <>
+                                            <X size={18} />
+                                            <span className="text-sm">Cerrar</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <HelpCircle size={18} />
+                                            <span className="text-sm">¿Dónde puedo comprarlo?</span>
+                                        </>
+                                    )}
                                 </Button>
 
                                 <CardContent className="relative h-full p-8 sm:p-12 flex flex-col justify-end z-10 text-center transition-all duration-500">
