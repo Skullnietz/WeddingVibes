@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
-import { Menu, X, LogOut, Music, CalendarCheck, User as UserIcon } from "lucide-react";
+import { Menu, X, LogOut, Music, CalendarCheck, User as UserIcon, Gift } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import {
@@ -31,6 +31,12 @@ export default function Navigation() {
         enabled: isAuthenticated
     });
     const hasRsvped = !!rsvp;
+    const isAttending = rsvp?.isAttending === true;
+
+    const { data: gifts = [] } = trpc.gifts.getGifts.useQuery(undefined, {
+        enabled: isAuthenticated && isAttending
+    });
+    const hasClaimedGift = gifts.some((g: any) => g.claimedByUserId === user?.id);
 
     const getInitials = (name?: string | null) => {
         if (!name) return "U";
@@ -41,21 +47,33 @@ export default function Navigation() {
         { id: "inicio", label: "Inicio" },
         { id: "detalles", label: "Detalles" },
         { id: "galeria", label: "Galería" },
-        { id: "rsvp", label: "RSVP" },
+        { id: "rsvp", label: "Asistencia" },
         { id: "regalos", label: "Regalos" },
         { id: "faq", label: "FAQ" },
     ];
 
     const scrollToSection = (sectionId: string) => {
-        // If not on the home page, navigate to home and append hash
+        setIsOpen(false);
         if (location !== "/") {
-            window.location.href = `/#${sectionId}`;
+            navigate("/");
+            setTimeout(() => {
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    const headerOffset = 80;
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.scrollY - headerOffset;
+                    window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+                }
+            }, 500);
             return;
         }
+
         const element = document.getElementById(sectionId);
         if (element) {
-            element.scrollIntoView({ behavior: "smooth" });
-            setIsOpen(false);
+            const headerOffset = 80;
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.scrollY - headerOffset;
+            window.scrollTo({ top: offsetPosition, behavior: "smooth" });
         }
     };
 
@@ -98,8 +116,17 @@ export default function Navigation() {
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem onClick={() => navigate("/mi-galeria")} className="cursor-pointer">
-                                    <UserIcon className="mr-2 h-4 w-4" />
-                                    <span>Mi Galería</span>
+                                    {hasClaimedGift ? (
+                                        <>
+                                            <UserIcon className="mr-2 h-4 w-4" />
+                                            <span>Mi Galería</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Gift className="mr-2 h-4 w-4" />
+                                            <span>Mesa de Regalos</span>
+                                        </>
+                                    )}
                                 </DropdownMenuItem>
                                 {!hasRsvped && (
                                     <DropdownMenuItem onClick={() => scrollToSection("rsvp")} className="cursor-pointer">
@@ -176,7 +203,15 @@ export default function Navigation() {
                                         onClick={() => { navigate("/mi-galeria"); setIsOpen(false); }}
                                         className="text-sm font-sans flex items-center gap-2 text-foreground hover:text-primary transition-colors text-left px-2"
                                     >
-                                        <UserIcon className="h-4 w-4" /> Mi Galería
+                                        {hasClaimedGift ? (
+                                            <>
+                                                <UserIcon className="h-4 w-4" /> Mi Galería
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Gift className="h-4 w-4" /> Mesa de Regalos
+                                            </>
+                                        )}
                                     </button>
                                     {!hasRsvped && (
                                         <button
