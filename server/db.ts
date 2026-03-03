@@ -53,10 +53,26 @@ export async function upsertUser(user: InsertUser): Promise<void> {
   }
 
   try {
+    const isOwner = user.openId === ENV.ownerOpenId;
+
     const values: InsertUser = {
       openId: user.openId,
+      role: user.role !== undefined ? user.role : (isOwner ? 'admin' : 'user'),
+      createdAt: sql`NOW()` as any,
+      updatedAt: sql`NOW()` as any,
+      lastSignedIn: sql`NOW()` as any,
     };
-    const updateSet: Record<string, unknown> = {};
+
+    const updateSet: Record<string, unknown> = {
+      updatedAt: sql`NOW()`,
+      lastSignedIn: sql`NOW()`,
+    };
+
+    if (user.role !== undefined) {
+      updateSet.role = user.role;
+    } else if (isOwner) {
+      updateSet.role = 'admin';
+    }
 
     const textFields = ["name", "email", "loginMethod"] as const;
     type TextField = (typeof textFields)[number];
@@ -70,26 +86,6 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     };
 
     textFields.forEach(assignNullable);
-
-    if (user.lastSignedIn !== undefined) {
-      values.lastSignedIn = sql`NOW()` as any;
-      updateSet.lastSignedIn = sql`NOW()`;
-    }
-    if (user.role !== undefined) {
-      values.role = user.role;
-      updateSet.role = user.role;
-    } else if (user.openId === ENV.ownerOpenId) {
-      values.role = 'admin';
-      updateSet.role = 'admin';
-    }
-
-    if (!values.lastSignedIn) {
-      values.lastSignedIn = sql`NOW()` as any;
-    }
-
-    if (Object.keys(updateSet).length === 0 || updateSet.lastSignedIn === undefined) {
-      updateSet.lastSignedIn = sql`NOW()`;
-    }
 
     await db.insert(users).values(values).onDuplicateKeyUpdate({
       set: updateSet,
