@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { Upload, Image as ImageIcon, CheckCircle, Clock, Gift } from "lucide-react";
+import { Upload, Image as ImageIcon, CheckCircle, Clock, Gift, CookingPot, Utensils, UtensilsCrossed, Coffee, Droplets, BedDouble, Bath, Briefcase, Zap, Fan, Flame, ShoppingBag } from "lucide-react";
 import { useAuth } from "../_core/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -186,6 +186,23 @@ export default function MyGallery() {
                                 const isClaimed = gift.claimedByUserId !== null;
                                 const isClaimedByMe = gift.claimedByUserId === user?.id;
 
+                                // Definir icono por defecto y mapeo
+                                let ItemIcon = Gift;
+                                const n = gift.name.toUpperCase();
+                                if (n.includes("BATERIA DE COCINA") || n.includes("SARTENES")) ItemIcon = CookingPot;
+                                else if (n.includes("EDREDON") || n.includes("SABANAS") || n.includes("ALMOHADA") || n.includes("COLCHON")) ItemIcon = BedDouble;
+                                else if (n.includes("FREIDORA") || n.includes("LICUADORA")) ItemIcon = Fan;
+                                else if (n.includes("DISPENSADOR")) ItemIcon = Droplets;
+                                else if (n.includes("VAJILLA")) ItemIcon = Utensils;
+                                else if (n.includes("CUBIERTOS") || n.includes("CUCHILLOS")) ItemIcon = UtensilsCrossed;
+                                else if (n.includes("TOALLAS") || n.includes("BAÑO")) ItemIcon = Bath;
+                                else if (n.includes("CAFETERA")) ItemIcon = Coffee;
+                                else if (n.includes("DESPENSA")) ItemIcon = ShoppingBag;
+                                else if (n.includes("VELAS")) ItemIcon = Flame;
+                                else if (n.includes("ESTUFA") || n.includes("BOILER")) ItemIcon = Zap;
+                                else if (n.includes("MALETAS") || n.includes("LONCHERA")) ItemIcon = Briefcase;
+                                else if (n.includes("KARCHER")) ItemIcon = Droplets;
+
                                 return (
                                     <motion.div
                                         key={gift.id}
@@ -196,9 +213,14 @@ export default function MyGallery() {
                                         <Card className={`h-full border ${isClaimedByMe ? 'border-primary bg-primary/5' : isClaimed ? 'border-muted bg-muted/20 opacity-70' : 'border-primary/20 hover:border-primary/50'} transition-all`}>
                                             <CardContent className="p-5 flex flex-col justify-between h-full">
                                                 <div>
-                                                    <h3 className={`font-serif text-lg font-bold mb-2 ${isClaimed && !isClaimedByMe ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
-                                                        {gift.name}
-                                                    </h3>
+                                                    <div className="flex items-center gap-3 mb-3">
+                                                        <div className={`p-2 rounded-full ${isClaimedByMe ? 'bg-primary/20 text-primary' : isClaimed ? 'bg-muted text-muted-foreground' : 'bg-primary/10 text-primary'}`}>
+                                                            <ItemIcon size={24} />
+                                                        </div>
+                                                        <h3 className={`font-serif text-[1.1rem] leading-tight font-bold ${isClaimed && !isClaimedByMe ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+                                                            {gift.name}
+                                                        </h3>
+                                                    </div>
                                                 </div>
                                                 <div className="mt-4">
                                                     {isClaimedByMe ? (
