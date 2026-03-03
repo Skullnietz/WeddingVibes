@@ -111,7 +111,7 @@ export default function MyGallery() {
     const fetchMyPhotos = useCallback(async () => {
         if (!user) return;
         try {
-            const res = await fetch(`/ api / photos / mine ? userId = ${ user.id } `);
+            const res = await fetch(`/api/photos/mine?userId=${user.id}`);
             if (res.ok) {
                 const data = await res.json();
                 setMyPhotos(data);
@@ -289,9 +289,9 @@ export default function MyGallery() {
 
                             <div className="flex items-center justify-between mt-2">
                                 <div className="flex gap-2">
-                                    <div className={`h - 2.5 w - 2.5 rounded - full transition - colors ${ tourStep === 1 ? 'bg-primary' : 'bg-primary/20' } `} />
-                                    <div className={`h - 2.5 w - 2.5 rounded - full transition - colors ${ tourStep === 2 ? 'bg-primary' : 'bg-primary/20' } `} />
-                                    <div className={`h - 2.5 w - 2.5 rounded - full transition - colors ${ tourStep === 3 ? 'bg-primary' : 'bg-primary/20' } `} />
+                                    <div className={`h-2.5 w-2.5 rounded-full transition-colors ${tourStep === 1 ? 'bg-primary' : 'bg-primary/20' } `} />
+                                    <div className={`h-2.5 w-2.5 rounded-full transition-colors ${tourStep === 2 ? 'bg-primary' : 'bg-primary/20' } `} />
+                                    <div className={`h-2.5 w-2.5 rounded-full transition-colors ${tourStep === 3 ? 'bg-primary' : 'bg-primary/20' } `} />
                                 </div>
 
                                 <div className="flex gap-2">
@@ -314,7 +314,7 @@ export default function MyGallery() {
 
                 {/* Gift Registry Section (Grid View) - AT THE VERY TOP */}
                 {showGridView && (
-                    <div className={`mb - 12 mt - 4 transition - all duration - 500 rounded - 2xl ${ tourStep === 1 ? 'z-[51] relative ring-4 ring-primary ring-offset-8 ring-offset-background bg-background p-4' : 'p-0' } `} ref={giftSectionRef}>
+                    <div className={`mb-12 mt-4 transition-all duration-500 rounded-2xl ${tourStep === 1 ? 'z-[51] relative ring-4 ring-primary ring-offset-8 ring-offset-background bg-background p-4' : 'p-0' } `} ref={giftSectionRef}>
                         <h2 className="font-serif text-3xl font-bold text-primary mb-2 flex items-center gap-2">
                             <Gift className="text-primary" /> Mesa de Regalos
                         </h2>
@@ -375,7 +375,7 @@ export default function MyGallery() {
                                                     transition={{ duration: 0.3, delay: i * 0.05 }}
                                                     className="h-full"
                                                 >
-                                                    <Card className={`relative overflow - hidden h - 64 sm: h - 72 border - 0 group transition - all duration - 500 rounded - xl shadow - md hover: shadow - xl ${ isClaimed && !isClaimedByMe ? 'opacity-70 grayscale-[30%]' : '' } `}>
+                                                    <Card className={`relative overflow-hidden h-64 sm:h-72 border-0 group transition-all duration-500 rounded-xl shadow-md hover:shadow-xl ${isClaimed && !isClaimedByMe ? 'opacity-70 grayscale-[30%]' : '' } `}>
                                                         {/* Background Image */}
                                                         <div
                                                             className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
@@ -402,7 +402,7 @@ export default function MyGallery() {
 
                                                         <CardContent className="relative h-full p-6 flex flex-col justify-end z-10">
                                                             <div className="transform transition-transform duration-300 translate-y-2 group-hover:translate-y-0">
-                                                                <h3 className={`font - serif text - 2xl leading - tight font - bold text - white mb - 4 drop - shadow - md`}>
+                                                                <h3 className={`font-serif text-2xl leading-tight font-bold text-white mb-4 drop-shadow-md`}>
                                                                     {gift.name}
                                                                 </h3>
 
@@ -453,7 +453,7 @@ export default function MyGallery() {
                 </header>
 
                 {/* Upload Zone */}
-                <div className={`transition - all duration - 500 rounded - 2xl ${ tourStep === 2 ? 'z-[51] relative ring-4 ring-primary ring-offset-8 ring-offset-background bg-background' : '' } `}>
+                <div className={`transition-all duration-500 rounded-2xl ${tourStep === 2 ? 'z-[51] relative ring-4 ring-primary ring-offset-8 ring-offset-background bg-background' : '' } `}>
                     <Card className="mb-12 border-dashed border-2 bg-muted/20">
                         <CardContent className="p-8 flex flex-col items-center justify-center text-center">
                             {preview ? (
@@ -490,7 +490,7 @@ export default function MyGallery() {
                 </div>
 
                 {/* My Uploads Grid */}
-                <div className={`transition - all duration - 500 rounded - 2xl ${ tourStep === 3 ? 'z-[51] relative ring-4 ring-primary ring-offset-8 ring-offset-background bg-background p-4' : 'p-0' } `} ref={gallerySectionRef}>
+                <div className={`transition-all duration-500 rounded-2xl ${tourStep === 3 ? 'z-[51] relative ring-4 ring-primary ring-offset-8 ring-offset-background bg-background p-4' : 'p-0' } `} ref={gallerySectionRef}>
                     <h2 className="font-serif text-2xl font-bold text-primary mb-6">Mis Fotos ({myPhotos.length})</h2>
                     {myPhotos.length === 0 ? (
                         <div className="text-center py-12 text-muted-foreground bg-muted/10 rounded-lg">
@@ -532,7 +532,7 @@ export default function MyGallery() {
 
                 {/* Exclusive Gift Section (Chosen Gift) - After My Photos */}
                 {showExclusiveView && myClaimedGift && (
-                    <div className={`mt - 20 pt - 16 border - t border - primary / 20 transition - all duration - 500 rounded - 2xl ${ tourStep === 1 ? 'z-[51] relative ring-4 ring-primary ring-offset-8 ring-offset-background bg-background p-4' : 'p-0' } `} ref={giftSectionRef}>
+                    <div className={`mt - 20 pt - 16 border-t border-primary/20 transition-all duration-500 rounded-2xl ${tourStep === 1 ? 'z-[51] relative ring-4 ring-primary ring-offset-8 ring-offset-background bg-background p-4' : 'p-0' } `} ref={giftSectionRef}>
                         <h2 className="font-serif text-3xl font-bold text-primary mb-6 flex items-center justify-center gap-3 text-center">
                             <Gift className="text-primary" size={32} /> Mi Aportación
                         </h2>
