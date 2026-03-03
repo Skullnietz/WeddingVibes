@@ -327,26 +327,7 @@ export default function MyGallery() {
                             </div>
                         ) : (
                             <div>
-                                {/* Bank Transfer Option */}
-                                <Card className="p-6 mb-8 border-primary/20 bg-primary/5 shadow-sm relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-4 opacity-10">
-                                        <Heart size={80} className="text-primary" />
-                                    </div>
-                                    <div className="flex items-start gap-4 relative z-10">
-                                        <div className="bg-white p-3 rounded-full shadow-sm">
-                                            <Heart className="w-6 h-6 text-primary" />
-                                        </div>
-                                        <div>
-                                            <h3 className="font-serif text-xl font-bold text-primary mb-2">Transferencia Bancaria</h3>
-                                            <p className="text-muted-foreground font-sans mb-4">Si prefieres hacernos un obsequio en efectivo, aquí tienes nuestros datos bancarios:</p>
-                                            <div className="bg-white p-4 rounded-lg shadow-inner inline-block space-y-2">
-                                                <p className="font-sans text-sm"><span className="font-semibold text-foreground">Cuenta:</span> 123456789</p>
-                                                <p className="font-sans text-sm"><span className="font-semibold text-foreground">CLABE:</span> 002180000000123456789</p>
-                                                <p className="font-sans text-sm"><span className="font-semibold text-foreground">Banco:</span> BBVA</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Card>
+
                                 {isChangingGift && (
                                     <div className="bg-primary/10 border border-primary/30 p-4 rounded-lg mb-6 flex justify-between items-center">
                                         <p className="font-serif text-primary text-sm sm:text-base">Estás buscando un nuevo obsequio. Al elegir uno, el anterior se liberará.</p>
@@ -432,6 +413,39 @@ export default function MyGallery() {
                                         })}
                                     </AnimatePresence>
                                 </div>
+
+                                {/* Bank Transfer Option */}
+                                <Card className="p-6 mt-12 mb-4 border-primary/20 bg-primary/5 shadow-sm relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 p-4 opacity-10">
+                                        <Heart size={80} className="text-primary" />
+                                    </div>
+                                    <div className="flex items-start gap-4 relative z-10">
+                                        <div className="bg-white p-3 rounded-full shadow-sm shrink-0">
+                                            <Heart className="w-6 h-6 text-primary" />
+                                        </div>
+                                        <div className="w-full">
+                                            <h3 className="font-serif text-xl font-bold text-primary mb-2">Transferencia Bancaria</h3>
+                                            <p className="text-muted-foreground font-sans mb-4">Si prefieres hacernos un obsequio en efectivo, aquí tienes nuestros datos bancarios:</p>
+                                            <div className="bg-white p-4 rounded-lg shadow-inner space-y-3 relative">
+                                                <div className="flex items-center justify-between gap-4">
+                                                    <p className="font-sans text-sm flex-1"><span className="font-semibold text-foreground">Banco:</span> BBVA</p>
+                                                </div>
+                                                <div className="flex items-center justify-between gap-4">
+                                                    <p className="font-sans text-sm flex-1"><span className="font-semibold text-foreground">Cuenta:</span> 123456789</p>
+                                                    <Button variant="ghost" size="sm" className="h-8 shadow-sm border border-border/50 text-xs px-2 shrink-0" onClick={() => { navigator.clipboard.writeText("123456789"); toast.success("Cuenta copiada al portapapeles"); }}>
+                                                        <Copy size={14} className="mr-1" /> Copiar
+                                                    </Button>
+                                                </div>
+                                                <div className="flex items-center justify-between gap-4">
+                                                    <p className="font-sans text-sm flex-1"><span className="font-semibold text-foreground">CLABE:</span> 002180000000123456789</p>
+                                                    <Button variant="ghost" size="sm" className="h-8 shadow-sm border border-border/50 text-xs px-2 shrink-0" onClick={() => { navigator.clipboard.writeText("002180000000123456789"); toast.success("CLABE copiada al portapapeles"); }}>
+                                                        <Copy size={14} className="mr-1" /> Copiar
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Card>
                             </div>
                         )}
                     </div>
