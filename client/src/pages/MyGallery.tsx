@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Upload, Image as ImageIcon, CheckCircle, Clock, Gift, X, ChevronRight, ChevronLeft, HelpCircle } from "lucide-react";
+import { Upload, Image as ImageIcon, CheckCircle, Clock, Gift, X, ChevronRight, ChevronLeft, HelpCircle, CalendarCheck, Lock } from "lucide-react";
 import { useAuth } from "../_core/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,8 +24,13 @@ export default function MyGallery() {
     const gallerySectionRef = useRef<HTMLDivElement>(null);
 
     const utils = trpc.useUtils();
-    const { data: gifts = [], isLoading: loadingGifts } = trpc.gifts.getGifts.useQuery(undefined, {
+    const { data: rsvp, isLoading: loadingRsvp } = trpc.rsvp.getByUser.useQuery(undefined, {
         enabled: isAuthenticated
+    });
+    const hasRsvped = !!rsvp;
+
+    const { data: gifts = [], isLoading: loadingGifts } = trpc.gifts.getGifts.useQuery(undefined, {
+        enabled: isAuthenticated && hasRsvped
     });
 
     const claimGiftMutation = trpc.gifts.claim.useMutation({
@@ -56,7 +61,7 @@ export default function MyGallery() {
 
     // Initialize Tour
     useEffect(() => {
-        if (isAuthenticated) {
+        if (isAuthenticated && hasRsvped && !loadingRsvp) {
             const hasSeenTour = localStorage.getItem("hasSeenGalleryTour");
             if (!hasSeenTour) {
                 // Give the page a moment to render
@@ -65,7 +70,7 @@ export default function MyGallery() {
                 }, 1000);
             }
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, hasRsvped, loadingRsvp]);
 
     const closeTour = () => {
         setTourStep(0);
@@ -164,6 +169,40 @@ export default function MyGallery() {
     };
 
     if (!isAuthenticated) return null;
+
+    if (loadingRsvp) {
+        return (
+            <div className="min-h-screen bg-background pt-[80px] pb-24 flex items-center justify-center">
+                <div className="text-muted-foreground animate-pulse">Cargando...</div>
+            </div>
+        );
+    }
+
+    if (!hasRsvped) {
+        return (
+            <div className="min-h-screen bg-background pt-[80px] pb-24 relative flex items-center justify-center p-4">
+                <Card className="max-w-md w-full p-8 text-center bg-white/80 backdrop-blur-md shadow-xl border-primary/20">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Lock className="text-primary w-8 h-8" />
+                    </div>
+                    <h2 className="font-serif text-2xl font-bold text-primary mb-4">
+                        Sección Protegida
+                    </h2>
+                    <p className="text-muted-foreground font-sans mb-8">
+                        Para poder acceder a tu Galería Privada y a la Mesa de Regalos interactiva, primero debes confirmar tu asistencia a la boda. ¡Nos encantaría contar contigo!
+                    </p>
+                    <Button
+                        size="lg"
+                        onClick={() => window.location.href = "/#rsvp"}
+                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-md font-serif text-lg py-6"
+                    >
+                        <CalendarCheck className="mr-3" size={20} />
+                        Confirmar Asistencia
+                    </Button>
+                </Card>
+            </div>
+        );
+    }
 
     const myClaimedGift = gifts.find((g: any) => g.claimedByUserId === user?.id);
     const showExclusiveView = !!myClaimedGift && !isChangingGift;
