@@ -19,6 +19,8 @@ export default function SpotifyPlayer() {
     const [currentTrack, setCurrentTrack] = useState<any>(null);
     const [tokenError, setTokenError] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [deviceId, setDeviceId] = useState<string | null>(null);
+    const [token, setToken] = useState<string | null>(null);
 
     // Fallback track info when player is idle but connected
     const defaultTrack = {
@@ -44,7 +46,7 @@ export default function SpotifyPlayer() {
 
     const startWeddingPlaylist = async (deviceId: string, token: string) => {
         try {
-            // 1. Transfer playback to this device first so Spotify knows where to route the audio
+            // 1. Transfer playback to this device first and attempt to start playing
             await fetch('https://api.spotify.com/v1/me/player', {
                 method: 'PUT',
                 headers: {
@@ -53,7 +55,7 @@ export default function SpotifyPlayer() {
                 },
                 body: JSON.stringify({
                     device_ids: [deviceId],
-                    play: false,
+                    play: true,
                 }),
             });
 
@@ -76,6 +78,20 @@ export default function SpotifyPlayer() {
         }
     };
 
+    const handlePlayClick = async () => {
+        if (!deviceId || !token) return;
+
+        // If it's already active/playing, just let the Web SDK toggle it natively
+        if (isActive && !isPaused) {
+            player?.pause();
+            return;
+        }
+
+        // If paused or inactive, force the Wedding Playlist payload to ensure audio routes here
+        await startWeddingPlaylist(deviceId, token);
+        player?.resume();
+    };
+
     useEffect(() => {
         // 1. Setup global callback for the SDK
         window.onSpotifyWebPlaybackSDKReady = async () => {
@@ -93,6 +109,8 @@ export default function SpotifyPlayer() {
             // Ready
             spotifyPlayer.addListener('ready', ({ device_id }: { device_id: string }) => {
                 console.log('Ready with Device ID', device_id);
+                setDeviceId(device_id);
+                setToken(token);
                 setIsLoading(false);
                 // Automatically transfer playback and start the wedding playlist
                 startWeddingPlaylist(device_id, token);
@@ -226,7 +244,7 @@ export default function SpotifyPlayer() {
                         </Button>
 
                         <Button
-                            onClick={() => player?.togglePlay()}
+                            onClick={handlePlayClick}
                             className="w-10 h-10 rounded-full bg-primary text-primary-foreground hover:scale-105 transition-all shadow-md flex items-center justify-center p-0"
                         >
                             {isPaused ? <Play className="w-5 h-5 fill-current ml-1" /> : <Pause className="w-5 h-5 fill-current" />}
