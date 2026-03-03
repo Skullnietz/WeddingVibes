@@ -17,13 +17,21 @@ export async function getDb() {
     const dbName = process.env.DB_NAME;
 
     try {
-      if (!dbUrl) {
-        console.warn("[Database] No DATABASE_URL found in environment variables.");
-        return null;
+      if (dbHost && dbUser && dbPassword && dbName) {
+        // Use explicit properties to avoid mysql2 URL parser choking on @@ password characters
+        _pool = mysql.createPool({
+          host: dbHost,
+          user: dbUser,
+          password: dbPassword,
+          database: dbName,
+        });
+        _db = drizzle(_pool);
+      } else if (dbUrl) {
+        _pool = mysql.createPool(dbUrl);
+        _db = drizzle(_pool);
+      } else {
+        console.warn("[Database] No connection credentials found. Please set DB_HOST, DB_USER, DB_PASSWORD, and DB_NAME.");
       }
-
-      _pool = mysql.createPool(dbUrl);
-      _db = drizzle(_pool);
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
