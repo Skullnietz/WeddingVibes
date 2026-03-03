@@ -65,7 +65,7 @@ export default function Navigation() {
                     {isAuthenticated ? (
                         <>
                             <button
-                                onClick={() => navigate("/galeria")}
+                                onClick={() => navigate("/mi-galeria")}
                                 className="text-sm font-sans text-primary font-semibold"
                             >
                                 Mi Galería
@@ -115,7 +115,7 @@ export default function Navigation() {
                             {isAuthenticated ? (
                                 <>
                                     <button
-                                        onClick={() => { navigate("/galeria"); setIsOpen(false); }}
+                                        onClick={() => { navigate("/mi-galeria"); setIsOpen(false); }}
                                         className="text-sm font-sans text-primary font-semibold text-left"
                                     >
                                         Mi Galería
