@@ -15,8 +15,8 @@ export const appRouter = router({
         const db = await getDb();
         if (!db) return { connected: false, message: "No database instance available" };
 
-        // Execute a lightweight query to test the connection
-        const result = await db.select().from(users).limit(1);
+        // Execute a lightweight raw query to test connection without requiring the users table to exist yet
+        await db.execute(sql`SELECT 1`);
         return { connected: true, message: `Connected to Hostinger MySQL Database!` };
       } catch (err: any) {
         return { connected: false, message: err?.message || "Connection failed" };
