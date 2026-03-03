@@ -19,7 +19,11 @@ export const appRouter = router({
         await db.execute(sql`SELECT id FROM users LIMIT 1`);
         return { connected: true, message: `Connected to Hostinger MySQL Database!` };
       } catch (err: any) {
-        return { connected: false, message: err?.message || "Connection failed" };
+        // Drizzle wraps errors in "Failed query: <sql>\nparams: <params>\n<actual error>". We want the actual error.
+        const fullMessage = err?.message || "Connection failed";
+        const actualError = fullMessage.split('\n').pop() || fullMessage;
+        const cause = err?.cause?.message ? ` (Cause: ${err.cause.message})` : '';
+        return { connected: false, message: `DB_ERR: ${actualError}${cause}` };
       }
     }),
   }),
