@@ -25,10 +25,10 @@ export async function getDb() {
           password: dbPassword,
           database: dbName,
         });
-        _db = drizzle(_pool);
+        _db = drizzle(_pool, { mode: 'default' });
       } else if (dbUrl) {
         _pool = mysql.createPool(dbUrl);
-        _db = drizzle(_pool);
+        _db = drizzle(_pool, { mode: 'default' });
       } else {
         console.warn("[Database] No connection credentials found. Please set DB_HOST, DB_USER, DB_PASSWORD, and DB_NAME.");
       }
