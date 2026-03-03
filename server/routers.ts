@@ -9,24 +9,6 @@ import { createRSVP, getRSVPByUserId, updateRSVP, getWeddingPhotos, getPreWeddin
 
 export const appRouter = router({
   system: systemRouter,
-  db: router({
-    checkConnection: publicProcedure.query(async () => {
-      try {
-        const db = await getDb();
-        if (!db) return { connected: false, message: "No database instance available" };
-
-        // Execute a raw string-interpolated query to completely bypass Drizzle's "LIMIT ?" prepared statement generation
-        await db.execute(sql`SELECT id FROM users LIMIT 1`);
-        return { connected: true, message: `Connected to Hostinger MySQL Database!` };
-      } catch (err: any) {
-        // Drizzle wraps errors in "Failed query: <sql>\nparams: <params>\n<actual error>". We want the actual error.
-        const fullMessage = err?.message || "Connection failed";
-        const actualError = fullMessage.split('\n').pop() || fullMessage;
-        const cause = err?.cause?.message ? ` (Cause: ${err.cause.message})` : '';
-        return { connected: false, message: `DB_ERR: ${actualError}${cause}` };
-      }
-    }),
-  }),
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
