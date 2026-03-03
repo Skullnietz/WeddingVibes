@@ -608,6 +608,7 @@ function GallerySection() {
 function RSVPSection() {
   const { user, isAuthenticated } = useAuth();
   const [match, params] = useRoute("/invitacion/:slug");
+  const [, navigate] = useLocation();
 
   const { data: invitation } = trpc.invitations.getBySlug.useQuery(
     params?.slug || "",
@@ -630,6 +631,7 @@ function RSVPSection() {
     onSuccess: () => {
       toast.success("¡Gracias por confirmar tu asistencia!");
       utils.rsvp.getByUser.invalidate();
+      setTimeout(() => navigate("/mi-galeria"), 1000);
     },
     onError: (err) => {
       toast.error(err.message || "Ocurrió un error al guardar tu confirmación.");
@@ -640,6 +642,7 @@ function RSVPSection() {
     onSuccess: () => {
       toast.success("¡Tu confirmación ha sido actualizada con éxito!");
       utils.rsvp.getByUser.invalidate();
+      setTimeout(() => navigate("/mi-galeria"), 1000);
     },
     onError: (err) => {
       toast.error(err.message || "Ocurrió un error al actualizar tu confirmación.");
