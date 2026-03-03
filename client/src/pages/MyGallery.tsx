@@ -152,27 +152,13 @@ export default function MyGallery() {
         <div className="min-h-screen bg-background pt-[80px] pb-24">
             <div className="container max-w-4xl mx-auto px-4">
 
-                <header className="mb-8 flex justify-between items-center">
-                    <div>
-                        <h1 className="font-serif text-3xl font-bold text-primary mb-2">Mi Galería</h1>
-                        <p className="text-muted-foreground font-sans">
-                            Sube tus fotos de la boda. Una vez aprobadas, aparecerán en la galería oficial.
-                        </p>
-                    </div>
-                    {user?.role === 'admin' && (
-                        <Button onClick={() => navigate("/admin/galeria")} variant="outline" className="font-serif">
-                            Panel Admin
-                        </Button>
-                    )}
-                </header>
-
                 {/* Gift Registry Section (Grid View) - AT THE VERY TOP */}
                 {showGridView && (
-                    <div className="mb-12">
-                        <h2 className="font-serif text-2xl font-bold text-primary mb-2 flex items-center gap-2">
+                    <div className="mb-12 mt-4">
+                        <h2 className="font-serif text-3xl font-bold text-primary mb-2 flex items-center gap-2">
                             <Gift className="text-primary" /> Mesa de Regalos
                         </h2>
-                        <p className="text-muted-foreground font-sans mb-6">
+                        <p className="text-muted-foreground font-sans mb-6 text-lg">
                             Si deseas hacernos un obsequio, aquí te compartimos algunas sugerencias.
                         </p>
 
@@ -271,6 +257,20 @@ export default function MyGallery() {
                         )}
                     </div>
                 )}
+
+                <header className="mb-8 mt-12 flex justify-between items-center border-t border-primary/20 pt-8">
+                    <div>
+                        <h1 className="font-serif text-3xl font-bold text-primary mb-2">Mi Galería</h1>
+                        <p className="text-muted-foreground font-sans">
+                            Sube tus fotos de la boda. Una vez aprobadas, aparecerán en la galería oficial.
+                        </p>
+                    </div>
+                    {user?.role === 'admin' && (
+                        <Button onClick={() => navigate("/admin/galeria")} variant="outline" className="font-serif">
+                            Panel Admin
+                        </Button>
+                    )}
+                </header>
 
                 {/* Upload Zone */}
                 <Card className="mb-12 border-dashed border-2 bg-muted/20">
