@@ -6,6 +6,7 @@ import { ArrowLeft, Play, Pause, ChevronLeft, ChevronRight, Grid3X3, Maximize2 }
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import CustomAudioPlayer from "@/components/CustomAudioPlayer";
+import SpotifyPlayer from "@/components/SpotifyPlayer";
 import SongRequestBox from "@/components/SongRequestBox";
 
 type ViewMode = "grid" | "slideshow";
@@ -197,10 +198,12 @@ export default function Gallery() {
             </div>
           )}
 
-          {/* Song Request Box */}
           <div className="mt-16">
             <SongRequestBox />
           </div>
+
+          {/* Persistent global player for the Gallery */}
+          <SpotifyPlayer />
         </div>
       )}
 
@@ -296,9 +299,6 @@ export default function Gallery() {
               {isPlaying ? "Pausar Álbum" : "Reproducir Álbum"}
             </button>
           </div>
-
-          {/* Custom Web Audio Player */}
-          <CustomAudioPlayer />
         </div>
       )}
     </div>
