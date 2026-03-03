@@ -7,6 +7,7 @@ import { Heart, MapPin, Clock, Gift, Users, Camera, MessageCircle, ChevronDown, 
 import { useState, useEffect } from "react";
 import { useLocation, useRoute } from "wouter";
 import { trpc } from "../lib/trpc";
+import { toast } from "sonner";
 // Icono personalizado de Camisa (Shirt)
 const ShirtIcon = ({ className = "", size = 24 }: { className?: string; size?: number }) => (
   <svg
@@ -619,24 +620,68 @@ function RSVPSection() {
     numberOfCompanions: 0,
   });
 
+  const utils = trpc.useUtils();
+
+  const { data: existingRsvp, isLoading: loadingRsvp } = trpc.rsvp.getByUser.useQuery(undefined, {
+    enabled: isAuthenticated
+  });
+
+  const createRSVPMutation = trpc.rsvp.create.useMutation({
+    onSuccess: () => {
+      toast.success("¡Gracias por confirmar tu asistencia!");
+      utils.rsvp.getByUser.invalidate();
+    },
+    onError: (err) => {
+      toast.error(err.message || "Ocurrió un error al guardar tu confirmación.");
+    }
+  });
+
+  const updateRSVPMutation = trpc.rsvp.update.useMutation({
+    onSuccess: () => {
+      toast.success("¡Tu confirmación ha sido actualizada con éxito!");
+      utils.rsvp.getByUser.invalidate();
+    },
+    onError: (err) => {
+      toast.error(err.message || "Ocurrió un error al actualizar tu confirmación.");
+    }
+  });
+
   // Si el usuario acaba de iniciar sesión o se cargó la invitación, actualiza el nombre
   useEffect(() => {
-    if (invitation?.guestName) {
+    if (existingRsvp) {
+      setFormData({
+        guestName: existingRsvp.guestName,
+        isAttending: existingRsvp.isAttending ?? true,
+        numberOfCompanions: existingRsvp.numberOfCompanions ?? 0,
+      });
+    } else if (invitation?.guestName) {
       setFormData(prev => ({ ...prev, guestName: invitation.guestName }));
     } else if (user?.name) {
       setFormData(prev => ({ ...prev, guestName: user.name || "" }));
     }
-  }, [user, invitation]);
+  }, [user, invitation, existingRsvp]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isAuthenticated && !invitation) {
-      alert("Por favor inicia sesión con Google para confirmar tu asistencia, o accede desde tu invitación personalizada.");
+      toast.error("Por favor inicia sesión con Google para confirmar tu asistencia.");
       return;
     }
-    // TODO: Integrar con API de tRPC
-    console.log("RSVP submitted:", formData);
-    alert("¡Gracias por confirmar tu asistencia, " + formData.guestName + "!");
+
+    if (existingRsvp) {
+      updateRSVPMutation.mutate({
+        id: existingRsvp.id,
+        guestName: formData.guestName,
+        isAttending: formData.isAttending,
+        numberOfCompanions: formData.numberOfCompanions,
+      });
+    } else {
+      createRSVPMutation.mutate({
+        guestName: formData.guestName,
+        isAttending: formData.isAttending,
+        numberOfCompanions: formData.numberOfCompanions,
+      });
+    }
   };
 
   const showLoginPrompt = !isAuthenticated && !invitation;
