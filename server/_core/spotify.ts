@@ -92,8 +92,8 @@ spotifyRouter.get("/callback", async (req, res) => {
 
         console.log("[Spotify] Successfully acquired Web Playback token.");
 
-        // Redirect back to the gallery
-        res.redirect("/#galeria");
+        // Redirect back to My Gallery
+        res.redirect("/mi-galeria");
     } catch (err) {
         console.error("Error during Spotify callback:", err);
         res.redirect("/?spotify_error=token_failed");
