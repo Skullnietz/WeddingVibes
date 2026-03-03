@@ -99,35 +99,37 @@ export default function Gallery() {
     <div className="min-h-screen bg-background pt-[68px]">
       {/* Header */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-border">
-        <div className="container py-4 flex items-center justify-between">
+        <div className="container py-3 sm:py-4 flex flex-wrap items-center justify-between gap-y-2">
           <button
             onClick={() => navigate("/")}
-            className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
+            className="flex items-center gap-1 sm:gap-2 text-primary hover:text-primary/80 transition-colors"
           >
             <ArrowLeft size={20} />
-            <span className="font-sans font-semibold">Volver</span>
+            <span className="font-sans font-semibold hidden sm:inline">Volver</span>
           </button>
-          <h1 className="font-serif text-2xl font-bold text-primary">
+
+          <h1 className="font-serif text-lg sm:text-2xl font-bold text-primary absolute left-1/2 -translate-x-1/2 hidden md:block">
             Galería de la Boda
           </h1>
-          <div className="flex gap-2">
+
+          <div className="flex gap-1 sm:gap-2 ml-auto">
             <Button
               variant={viewMode === "grid" ? "default" : "outline"}
               size="sm"
               onClick={() => setViewMode("grid")}
-              className="font-serif"
+              className="font-serif px-2 sm:px-3"
             >
-              <Grid3X3 size={16} className="mr-2" />
-              Grid
+              <Grid3X3 size={16} className="sm:mr-2" />
+              <span className="hidden sm:inline">Grid</span>
             </Button>
             <Button
               variant={viewMode === "slideshow" ? "default" : "outline"}
               size="sm"
               onClick={() => setViewMode("slideshow")}
-              className="font-serif"
+              className="font-serif px-2 sm:px-3"
             >
-              <Maximize2 size={16} className="mr-2" />
-              Presentación
+              <Maximize2 size={16} className="sm:mr-2" />
+              <span className="hidden sm:inline">Presentación</span>
             </Button>
           </div>
         </div>
