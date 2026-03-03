@@ -68,10 +68,14 @@ export default function MyGallery() {
                 // Give the page a moment to render
                 setTimeout(() => {
                     setTourStep(1);
+                    // Scroll to appropriate section once rendered
+                    setTimeout(() => {
+                        giftSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 100);
                 }, 1000);
             }
         }
-    }, [isAuthenticated, hasRsvped, loadingRsvp]);
+    }, [isAuthenticated, isAttending, loadingRsvp]);
 
     const closeTour = () => {
         setTourStep(0);
