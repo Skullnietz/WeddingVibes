@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getLoginUrl } from "@/const";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, MapPin, Clock, Gift, Users, Camera, MessageCircle, ChevronDown, Menu, X, Gem, PartyPopper } from "lucide-react";
+import { Heart, MapPin, Clock, Gift, Users, Camera, MessageCircle, ChevronDown, Menu, X, Gem, PartyPopper, CheckCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLocation, useRoute } from "wouter";
 import { trpc } from "../lib/trpc";
@@ -812,12 +812,30 @@ function RSVPSection() {
                   />
                 </div>
               )}
-              <Button
-                type="submit"
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-serif py-3"
-              >
-                Enviar Confirmación
-              </Button>
+              {/* Form Actions */}
+              {existingRsvp && formData.isAttending ? (
+                <div className="space-y-4 pt-4 border-t border-border/50">
+                  <div className="flex items-center justify-center gap-2 p-4 bg-green-500/10 text-green-600 rounded-lg">
+                    <CheckCircle size={20} />
+                    <span className="font-serif font-semibold">¡Ya confirmaste tu asistencia!</span>
+                  </div>
+                  <Button
+                    type="submit"
+                    variant="outline"
+                    className="w-full text-muted-foreground hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors"
+                  >
+                    {/* Este botón cambiará o cancelará la asistencia si el usuario interactua, pero de fondo ya está confirmado */}
+                    Actualizar o Cancelar Asistencia
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-serif py-3"
+                >
+                  {existingRsvp && !formData.isAttending ? "Cancelar Asistencia" : "Enviar Confirmación"}
+                </Button>
+              )}
             </form>
           </Card>
         </div>
