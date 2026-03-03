@@ -628,11 +628,13 @@ function RSVPSection() {
   });
 
   const createRSVPMutation = trpc.rsvp.create.useMutation({
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       toast.success("¡Gracias por confirmar tu asistencia!");
       utils.rsvp.getByUser.invalidate();
-      localStorage.removeItem("hasSeenGalleryTour");
-      setTimeout(() => navigate("/mi-galeria"), 1000);
+      if (variables.isAttending) {
+        localStorage.removeItem("hasSeenGalleryTour");
+        setTimeout(() => navigate("/mi-galeria"), 1000);
+      }
     },
     onError: (err) => {
       toast.error(err.message || "Ocurrió un error al guardar tu confirmación.");
@@ -640,11 +642,13 @@ function RSVPSection() {
   });
 
   const updateRSVPMutation = trpc.rsvp.update.useMutation({
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       toast.success("¡Tu confirmación ha sido actualizada con éxito!");
       utils.rsvp.getByUser.invalidate();
-      localStorage.removeItem("hasSeenGalleryTour");
-      setTimeout(() => navigate("/mi-galeria"), 1000);
+      if (variables.isAttending) {
+        localStorage.removeItem("hasSeenGalleryTour");
+        setTimeout(() => navigate("/mi-galeria"), 1000);
+      }
     },
     onError: (err) => {
       toast.error(err.message || "Ocurrió un error al actualizar tu confirmación.");

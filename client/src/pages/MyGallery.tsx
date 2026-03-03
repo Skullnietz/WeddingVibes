@@ -28,9 +28,10 @@ export default function MyGallery() {
         enabled: isAuthenticated
     });
     const hasRsvped = !!rsvp;
+    const isAttending = rsvp?.isAttending === true;
 
     const { data: gifts = [], isLoading: loadingGifts } = trpc.gifts.getGifts.useQuery(undefined, {
-        enabled: isAuthenticated && hasRsvped
+        enabled: isAuthenticated && isAttending
     });
 
     const claimGiftMutation = trpc.gifts.claim.useMutation({
@@ -61,7 +62,7 @@ export default function MyGallery() {
 
     // Initialize Tour
     useEffect(() => {
-        if (isAuthenticated && hasRsvped && !loadingRsvp) {
+        if (isAuthenticated && isAttending && !loadingRsvp) {
             const hasSeenTour = localStorage.getItem("hasSeenGalleryTour");
             if (!hasSeenTour) {
                 // Give the page a moment to render
@@ -178,7 +179,7 @@ export default function MyGallery() {
         );
     }
 
-    if (!hasRsvped) {
+    if (!hasRsvped || !isAttending) {
         return (
             <div className="min-h-screen bg-background pt-[80px] pb-24 relative flex items-center justify-center p-4">
                 <Card className="max-w-md w-full p-8 text-center bg-white/80 backdrop-blur-md shadow-xl border-primary/20">
@@ -186,10 +187,12 @@ export default function MyGallery() {
                         <Lock className="text-primary w-8 h-8" />
                     </div>
                     <h2 className="font-serif text-2xl font-bold text-primary mb-4">
-                        Sección Protegida
+                        {hasRsvped && !isAttending ? "Galería No Disponible" : "Sección Protegida"}
                     </h2>
                     <p className="text-muted-foreground font-sans mb-8">
-                        Para poder acceder a tu Galería Privada y a la Mesa de Regalos interactiva, primero debes confirmar tu asistencia a la boda. ¡Nos encantaría contar contigo!
+                        {hasRsvped && !isAttending
+                            ? "Como nos indicaste que no podrás acompañarnos en la boda, la galería privada y mesa de regalos están deshabilitadas. Si cambias de opinión, puedes actualizar tu confirmación."
+                            : "Para poder acceder a tu Galería Privada y a la Mesa de Regalos interactiva, primero debes confirmar tu asistencia a la boda. ¡Nos encantaría contar contigo!"}
                     </p>
                     <Button
                         size="lg"
@@ -202,7 +205,7 @@ export default function MyGallery() {
                         className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-md font-serif text-lg py-6"
                     >
                         <CalendarCheck className="mr-3" size={20} />
-                        Confirmar Asistencia
+                        {hasRsvped && !isAttending ? "Actualizar Asistencia" : "Confirmar Asistencia"}
                     </Button>
                 </Card>
             </div>
