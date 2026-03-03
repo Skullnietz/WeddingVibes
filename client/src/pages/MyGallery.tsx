@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Upload, Image as ImageIcon, CheckCircle, Clock, Gift, X, ChevronRight, ChevronLeft } from "lucide-react";
+import { Upload, Image as ImageIcon, CheckCircle, Clock, Gift, X, ChevronRight, ChevronLeft, HelpCircle } from "lucide-react";
 import { useAuth } from "../_core/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -366,22 +366,9 @@ export default function MyGallery() {
                     </div>
                 )}
 
-                <header className="mb-8 mt-12 flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between items-start sm:items-center border-t border-primary/20 pt-8" ref={uploadSectionRef}>
+                <header className="mb-8 mt-12 flex justify-between items-center border-t border-primary/20 pt-8" ref={uploadSectionRef}>
                     <div>
-                        <h1 className="font-serif text-3xl font-bold text-primary mb-2 flex items-center gap-3">
-                            Mi Galería
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                className="h-7 px-2 text-xs rounded-full border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
-                                onClick={() => {
-                                    setTourStep(1);
-                                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                                }}
-                            >
-                                ¿Cómo funciona?
-                            </Button>
-                        </h1>
+                        <h1 className="font-serif text-3xl font-bold text-primary mb-2">Mi Galería</h1>
                         <p className="text-muted-foreground font-sans">
                             Sube tus fotos de la boda. Una vez aprobadas, aparecerán en la galería oficial.
                         </p>
@@ -525,6 +512,27 @@ export default function MyGallery() {
                 )}
 
             </div>
+
+            {/* Floating Help Button */}
+            {tourStep === 0 && (
+                <motion.div
+                    className="fixed bottom-6 right-6 z-40"
+                    initial={{ y: 0 }}
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                >
+                    <Button
+                        size="icon"
+                        className="h-14 w-14 rounded-full shadow-[0_10px_25px_rgba(0,0,0,0.3)] bg-primary text-primary-foreground hover:bg-primary/90 transition-all sm:hover:scale-110"
+                        onClick={() => {
+                            setTourStep(1);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                    >
+                        <HelpCircle size={28} />
+                    </Button>
+                </motion.div>
+            )}
         </div>
     );
 }
