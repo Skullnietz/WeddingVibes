@@ -461,6 +461,7 @@ function DetailsSection() {
 
 // Sección de Galería Pre-boda
 function GallerySection() {
+  const { isAuthenticated } = useAuth();
   const photos = [
     { id: 1, title: "Nuestra primer salida a bailar 💃🕺", src: "/gallery/Nuestra primer salida a bailar.jpeg" },
     { id: 2, title: "Esperando el año nuevo 🎆🥂", src: "/gallery/Esperando el año nuevo.jpeg" },
@@ -494,27 +495,58 @@ function GallerySection() {
           <div className="divider-luxury mx-auto w-24 mb-8" />
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-          {photos.map((photo, index) => (
-            <motion.div
-              key={photo.id}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: (index % 5) * 0.1 }}
-              className="relative overflow-hidden rounded-lg group cursor-pointer aspect-square bg-muted/50"
-              onClick={() => setSelectedPhoto(photo)}
-            >
-              <img
-                src={photo.src}
-                alt={photo.title}
-                className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <Camera className="text-white drop-shadow-lg" size={32} />
+        {/* Contenedor Principal de Galería */}
+        <div className="relative">
+          <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 ${!isAuthenticated ? 'h-[400px] md:h-[600px] overflow-hidden' : ''}`}>
+            {photos.map((photo, index) => (
+              <motion.div
+                key={photo.id}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: (index % 5) * 0.1 }}
+                className="relative overflow-hidden rounded-lg group cursor-pointer aspect-square bg-muted/50"
+                onClick={() => {
+                  if (isAuthenticated) {
+                    setSelectedPhoto(photo);
+                  }
+                }}
+              >
+                <img
+                  src={photo.src}
+                  alt={photo.title}
+                  className={`w-full h-full object-cover object-center transition-transform duration-500 ${isAuthenticated ? 'group-hover:scale-110' : ''}`}
+                  loading="lazy"
+                />
+                {isAuthenticated && (
+                  <div className="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <Camera className="text-white drop-shadow-lg" size={32} />
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Overlay Desvanecido para usuarios no autenticados */}
+          {!isAuthenticated && (
+            <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-secondary via-secondary/80 to-transparent flex flex-col items-center justify-end pb-12 z-10">
+              <div className="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-primary/20 text-center max-w-sm mx-4 transform transition-transform hover:scale-105">
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Camera className="text-primary" size={24} />
+                </div>
+                <h3 className="font-serif text-xl font-bold text-foreground mb-2">Galería Privada</h3>
+                <p className="text-sm text-muted-foreground mb-6 font-sans">
+                  Inicia sesión para ver todas las fotos de nuestra historia y compartir las tuyas.
+                </p>
+                <Button
+                  onClick={() => window.location.href = getLoginUrl()}
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-serif shadow-md"
+                >
+                  <Users className="mr-2" size={18} />
+                  Iniciar Sesión
+                </Button>
               </div>
-            </motion.div>
-          ))}
+            </div>
+          )}
         </div>
 
         {/* Modal / Lightbox animado */}
