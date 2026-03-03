@@ -807,6 +807,7 @@ function RSVPSection() {
 
 // Sección de Regalos
 function GiftsSection() {
+  const [, navigate] = useLocation();
   const giftOptions = [
     {
       icon: Gift,
@@ -856,7 +857,11 @@ function GiftsSection() {
                   <p className="text-luxury text-muted-foreground mb-6">
                     {option.description}
                   </p>
-                  <Button variant="outline" className="w-full">
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => navigate("/mi-galeria")}
+                  >
                     Más Información
                   </Button>
                 </Card>
