@@ -102,7 +102,8 @@ export async function getUserByOpenId(openId: string) {
     return undefined;
   }
 
-  const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
+  // Removing .limit(1) because old MariaDB crashes on prepared statement LIMIT parameters (?)
+  const result = await db.select().from(users).where(eq(users.openId, openId));
 
   return result.length > 0 ? result[0] : undefined;
 }
@@ -117,7 +118,7 @@ export async function createRSVP(rsvpData: InsertRSVP) {
 export async function getRSVPByUserId(userId: number) {
   const db = await getDb();
   if (!db) return undefined;
-  const result = await db.select().from(rsvps).where(eq(rsvps.userId, userId)).limit(1);
+  const result = await db.select().from(rsvps).where(eq(rsvps.userId, userId));
   return result.length > 0 ? result[0] : undefined;
 }
 
@@ -170,7 +171,7 @@ export async function createPreWeddingPhoto(photoData: InsertPreWeddingPhoto) {
 export async function getInvitationBySlug(slug: string) {
   const db = await getDb();
   if (!db) return undefined;
-  const result = await db.select().from(invitations).where(eq(invitations.slug, slug)).limit(1);
+  const result = await db.select().from(invitations).where(eq(invitations.slug, slug));
   return result.length > 0 ? result[0] : undefined;
 }
 

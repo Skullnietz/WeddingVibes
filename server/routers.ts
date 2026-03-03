@@ -15,8 +15,8 @@ export const appRouter = router({
         const db = await getDb();
         if (!db) return { connected: false, message: "No database instance available" };
 
-        // Execute a lightweight query to verify connection and schema alignment simultaneously
-        await db.select().from(users).limit(1);
+        // Execute a raw string-interpolated query to completely bypass Drizzle's "LIMIT ?" prepared statement generation
+        await db.execute(sql`SELECT id FROM users LIMIT 1`);
         return { connected: true, message: `Connected to Hostinger MySQL Database!` };
       } catch (err: any) {
         return { connected: false, message: err?.message || "Connection failed" };
