@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
-import { Upload, Image as ImageIcon, CheckCircle, Clock, Gift } from "lucide-react";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { Upload, Image as ImageIcon, CheckCircle, Clock, Gift, X, ChevronRight, ChevronLeft } from "lucide-react";
 import { useAuth } from "../_core/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,12 @@ export default function MyGallery() {
     const [isUploading, setIsUploading] = useState(false);
     const [myPhotos, setMyPhotos] = useState<any[]>([]);
     const [isChangingGift, setIsChangingGift] = useState(false);
+
+    // Tour State
+    const [tourStep, setTourStep] = useState(0); // 0 means closed, 1, 2, 3 are the steps
+    const giftSectionRef = useRef<HTMLDivElement>(null);
+    const uploadSectionRef = useRef<HTMLDivElement>(null);
+    const gallerySectionRef = useRef<HTMLDivElement>(null);
 
     const utils = trpc.useUtils();
     const { data: gifts = [], isLoading: loadingGifts } = trpc.gifts.getGifts.useQuery(undefined, {
@@ -47,6 +53,49 @@ export default function MyGallery() {
     useEffect(() => {
         if (!isAuthenticated) navigate("/");
     }, [isAuthenticated, navigate]);
+
+    // Initialize Tour
+    useEffect(() => {
+        if (isAuthenticated) {
+            const hasSeenTour = localStorage.getItem("hasSeenGalleryTour");
+            if (!hasSeenTour) {
+                // Give the page a moment to render
+                setTimeout(() => {
+                    setTourStep(1);
+                }, 1000);
+            }
+        }
+    }, [isAuthenticated]);
+
+    const closeTour = () => {
+        setTourStep(0);
+        localStorage.setItem("hasSeenGalleryTour", "true");
+    };
+
+    const nextTourStep = () => {
+        if (tourStep === 3) {
+            closeTour();
+        } else {
+            setTourStep(s => s + 1);
+        }
+
+        // Scroll to appropriate section
+        setTimeout(() => {
+            if (tourStep === 0) giftSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (tourStep === 1) uploadSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (tourStep === 2) gallerySectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+    };
+
+    const prevTourStep = () => {
+        setTourStep(s => Math.max(1, s - 1));
+
+        // Scroll to appropriate section
+        setTimeout(() => {
+            if (tourStep === 2) giftSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (tourStep === 3) uploadSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+    };
 
     const fetchMyPhotos = useCallback(async () => {
         if (!user) return;
@@ -149,12 +198,67 @@ export default function MyGallery() {
     };
 
     return (
-        <div className="min-h-screen bg-background pt-[80px] pb-24">
+        <div className="min-h-screen bg-background pt-[80px] pb-24 relative">
+            {/* Custom Interactive Tour Overlay */}
+            <AnimatePresence>
+                {tourStep > 0 && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 pointer-events-none flex flex-col items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, y: 20 }}
+                            animate={{ scale: 1, y: 0 }}
+                            exit={{ scale: 0.9, y: 20 }}
+                            className="bg-white/95 dark:bg-zinc-900/95 border border-primary/20 p-6 sm:p-8 rounded-2xl shadow-2xl max-w-sm sm:max-w-md w-full pointer-events-auto relative mt-[40vh]"
+                        >
+                            <button onClick={closeTour} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">
+                                <X size={20} />
+                            </button>
+
+                            <div className="mb-6">
+                                <h3 className="font-serif text-2xl font-bold text-primary mb-3">
+                                    {tourStep === 1 && "Mesa de Regalos"}
+                                    {tourStep === 2 && "Compartir Fotografías"}
+                                    {tourStep === 3 && "Tus Colecciones"}
+                                </h3>
+                                <p className="text-muted-foreground text-[15px] leading-relaxed">
+                                    {tourStep === 1 && "¡Hola! Si lo deseas, puedes elegir uno de los obsequios de nuestra mesa de regalos. Es totalmente opcional, pero agradecemos muchísimo cualquier lindo detalle. Solo necesitas darle click en 'Elegir Regalo' o en nuestra opción principal."}
+                                    {tourStep === 2 && "¡Queremos ver la boda desde tus ojos! En esta sección podrás subir todas las increíbles fotografías que captures durante nuestro evento. ¡Comparte tus mejores momentos con nosotros!"}
+                                    {tourStep === 3 && "Aquí aparecerán todas las fotos que hayas subido. Podrás ver y revisar el estado de cada una, ya sea que han sido 'aprobadas' para salir en la galería oficial o se encuentren 'pendientes'. ¡Gracias por ser parte de nuestra historia!"}
+                                </p>
+                            </div>
+
+                            <div className="flex items-center justify-between">
+                                <div className="flex gap-1.5">
+                                    <div className={`h-2 w-2 rounded-full ${tourStep === 1 ? 'bg-primary' : 'bg-primary/20'}`} />
+                                    <div className={`h-2 w-2 rounded-full ${tourStep === 2 ? 'bg-primary' : 'bg-primary/20'}`} />
+                                    <div className={`h-2 w-2 rounded-full ${tourStep === 3 ? 'bg-primary' : 'bg-primary/20'}`} />
+                                </div>
+
+                                <div className="flex gap-2">
+                                    {tourStep > 1 && (
+                                        <Button variant="outline" size="sm" onClick={prevTourStep}>
+                                            <ChevronLeft size={16} /> Atrás
+                                        </Button>
+                                    )}
+                                    <Button size="sm" onClick={nextTourStep} className="font-serif">
+                                        {tourStep === 3 ? "¡Entendido!" : "Siguiente"} {tourStep !== 3 && <ChevronRight size={16} />}
+                                    </Button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <div className="container max-w-4xl mx-auto px-4">
 
                 {/* Gift Registry Section (Grid View) - AT THE VERY TOP */}
                 {showGridView && (
-                    <div className="mb-12 mt-4">
+                    <div className={`mb-12 mt-4 transition-all duration-500 rounded-2xl ${tourStep === 1 ? 'z-[51] relative ring-4 ring-primary ring-offset-8 ring-offset-background bg-background p-4' : 'p-0'}`} ref={giftSectionRef}>
                         <h2 className="font-serif text-3xl font-bold text-primary mb-2 flex items-center gap-2">
                             <Gift className="text-primary" /> Mesa de Regalos
                         </h2>
@@ -258,7 +362,7 @@ export default function MyGallery() {
                     </div>
                 )}
 
-                <header className="mb-8 mt-12 flex justify-between items-center border-t border-primary/20 pt-8">
+                <header className="mb-8 mt-12 flex justify-between items-center border-t border-primary/20 pt-8" ref={uploadSectionRef}>
                     <div>
                         <h1 className="font-serif text-3xl font-bold text-primary mb-2">Mi Galería</h1>
                         <p className="text-muted-foreground font-sans">
@@ -273,82 +377,86 @@ export default function MyGallery() {
                 </header>
 
                 {/* Upload Zone */}
-                <Card className="mb-12 border-dashed border-2 bg-muted/20">
-                    <CardContent className="p-8 flex flex-col items-center justify-center text-center">
-                        {preview ? (
-                            <div className="w-full max-w-md mx-auto relative group">
-                                <img src={preview} alt="Vista previa" className="w-full h-auto rounded-lg shadow-md mb-4" />
-                                <div className="flex gap-4 justify-center">
-                                    <Button variant="outline" onClick={clearSelection} disabled={isUploading}>
-                                        Cancelar
-                                    </Button>
-                                    <Button onClick={handleUpload} disabled={isUploading} className="bg-primary group-hover:bg-primary/90">
-                                        {isUploading ? "Subiendo..." : "Subir Foto"}
-                                    </Button>
+                <div className={`transition-all duration-500 rounded-2xl ${tourStep === 2 ? 'z-[51] relative ring-4 ring-primary ring-offset-8 ring-offset-background bg-background' : ''}`}>
+                    <Card className="mb-12 border-dashed border-2 bg-muted/20">
+                        <CardContent className="p-8 flex flex-col items-center justify-center text-center">
+                            {preview ? (
+                                <div className="w-full max-w-md mx-auto relative group">
+                                    <img src={preview} alt="Vista previa" className="w-full h-auto rounded-lg shadow-md mb-4" />
+                                    <div className="flex gap-4 justify-center">
+                                        <Button variant="outline" onClick={clearSelection} disabled={isUploading}>
+                                            Cancelar
+                                        </Button>
+                                        <Button onClick={handleUpload} disabled={isUploading} className="bg-primary group-hover:bg-primary/90">
+                                            {isUploading ? "Subiendo..." : "Subir Foto"}
+                                        </Button>
+                                    </div>
                                 </div>
-                            </div>
-                        ) : (
-                            <label className="cursor-pointer w-full flex flex-col items-center p-12 overflow-hidden">
-                                <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-4 transition-transform hover:scale-110">
-                                    <Upload size={32} />
-                                </div>
-                                <h3 className="font-serif text-xl font-semibold mb-2">Toca para subir una foto</h3>
-                                <p className="text-sm text-muted-foreground max-w-sm">
-                                    Formatos soportados: JPG, PNG. Tamaño máximo 20MB.
-                                </p>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleFileChange}
-                                    className="hidden"
-                                />
-                            </label>
-                        )}
-                    </CardContent>
-                </Card>
+                            ) : (
+                                <label className="cursor-pointer w-full flex flex-col items-center p-12 overflow-hidden">
+                                    <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-4 transition-transform hover:scale-110">
+                                        <Upload size={32} />
+                                    </div>
+                                    <h3 className="font-serif text-xl font-semibold mb-2">Toca para subir una foto</h3>
+                                    <p className="text-sm text-muted-foreground max-w-sm">
+                                        Formatos soportados: JPG, PNG. Tamaño máximo 20MB.
+                                    </p>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                        className="hidden"
+                                    />
+                                </label>
+                            )}
+                        </CardContent>
+                    </Card>
+                </div>
 
                 {/* My Uploads Grid */}
-                <h2 className="font-serif text-2xl font-bold text-primary mb-6">Mis Fotos ({myPhotos.length})</h2>
-                {myPhotos.length === 0 ? (
-                    <div className="text-center py-12 text-muted-foreground bg-muted/10 rounded-lg">
-                        Aún no has subido ninguna foto. ¡Sé el primero en compartir!
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                        {myPhotos.map((photo, i) => (
-                            <motion.div
-                                key={photo.id}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.3, delay: i * 0.05 }}
-                                className="relative rounded-lg overflow-hidden shadow-sm aspect-square bg-muted group"
-                            >
-                                <img src={photo.imageUrl} alt={photo.title} className="w-full h-full object-cover" />
+                <div className={`transition-all duration-500 rounded-2xl ${tourStep === 3 ? 'z-[51] relative ring-4 ring-primary ring-offset-8 ring-offset-background bg-background p-4' : 'p-0'}`} ref={gallerySectionRef}>
+                    <h2 className="font-serif text-2xl font-bold text-primary mb-6">Mis Fotos ({myPhotos.length})</h2>
+                    {myPhotos.length === 0 ? (
+                        <div className="text-center py-12 text-muted-foreground bg-muted/10 rounded-lg">
+                            Aún no has subido ninguna foto. ¡Sé el primero en compartir!
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                            {myPhotos.map((photo, i) => (
+                                <motion.div
+                                    key={photo.id}
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ duration: 0.3, delay: i * 0.05 }}
+                                    className="relative rounded-lg overflow-hidden shadow-sm aspect-square bg-muted group"
+                                >
+                                    <img src={photo.imageUrl} alt={photo.title} className="w-full h-full object-cover" />
 
-                                {/* Status Overlay */}
-                                <div className="absolute top-2 right-2 z-10">
-                                    {photo.status === 'approved' ? (
-                                        <div className="bg-green-500/90 text-white backdrop-blur-sm px-2 py-1 flex items-center gap-1 rounded-full text-[10px] font-bold shadow-md">
-                                            <CheckCircle size={12} /> Aprobada
-                                        </div>
-                                    ) : photo.status === 'rejected' ? (
-                                        <div className="bg-red-500/90 text-white backdrop-blur-sm px-2 py-1 flex items-center gap-1 rounded-full text-[10px] font-bold shadow-md">
-                                            Rechazada
-                                        </div>
-                                    ) : (
-                                        <div className="bg-orange-500/90 text-white backdrop-blur-sm px-2 py-1 flex items-center gap-1 rounded-full text-[10px] font-bold shadow-md">
-                                            <Clock size={12} /> Pendiente
-                                        </div>
-                                    )}
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                )}
+                                    {/* Status Overlay */}
+                                    <div className="absolute top-2 right-2 z-10">
+                                        {photo.status === 'approved' ? (
+                                            <div className="bg-green-500/90 text-white backdrop-blur-sm px-2 py-1 flex items-center gap-1 rounded-full text-[10px] font-bold shadow-md">
+                                                <CheckCircle size={12} /> Aprobada
+                                            </div>
+                                        ) : photo.status === 'rejected' ? (
+                                            <div className="bg-red-500/90 text-white backdrop-blur-sm px-2 py-1 flex items-center gap-1 rounded-full text-[10px] font-bold shadow-md">
+                                                Rechazada
+                                            </div>
+                                        ) : (
+                                            <div className="bg-orange-500/90 text-white backdrop-blur-sm px-2 py-1 flex items-center gap-1 rounded-full text-[10px] font-bold shadow-md">
+                                                <Clock size={12} /> Pendiente
+                                            </div>
+                                        )}
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    )}
+                </div>
 
                 {/* Exclusive Gift Section (Chosen Gift) - After My Photos */}
                 {showExclusiveView && myClaimedGift && (
-                    <div className="mt-20 pt-16 border-t border-primary/20">
+                    <div className={`mt-20 pt-16 border-t border-primary/20 transition-all duration-500 rounded-2xl ${tourStep === 1 ? 'z-[51] relative ring-4 ring-primary ring-offset-8 ring-offset-background bg-background p-4' : 'p-0'}`} ref={giftSectionRef}>
                         <h2 className="font-serif text-3xl font-bold text-primary mb-6 flex items-center justify-center gap-3 text-center">
                             <Gift className="text-primary" size={32} /> Mi Aportación
                         </h2>
