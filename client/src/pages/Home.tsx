@@ -527,25 +527,46 @@ function GallerySection() {
             ))}
           </div>
 
-          {/* Overlay Desvanecido para usuarios no autenticados */}
-          {!isAuthenticated && (
-            <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-secondary via-secondary/80 to-transparent flex flex-col items-center justify-end pb-12 z-10">
-              <div className="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-primary/20 text-center max-w-sm mx-4 transform transition-transform hover:scale-105">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Camera className="text-primary" size={24} />
+          {/* Overlay Desvanecido para usuarios no autenticados o autenticados */}
+          {(!isAuthenticated || true) && (
+            <div className={`absolute inset-x-0 bottom-0 h-3/4 flex flex-col items-center justify-end pb-12 z-10 ${!isAuthenticated ? 'bg-gradient-to-t from-secondary via-secondary/80 to-transparent' : 'bg-gradient-to-t from-secondary/50 to-transparent pointer-events-none'}`}>
+              {!isAuthenticated ? (
+                <div className="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-primary/20 text-center max-w-sm mx-4 transform transition-transform hover:scale-105 pointer-events-auto">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Camera className="text-primary" size={24} />
+                  </div>
+                  <h3 className="font-serif text-xl font-bold text-foreground mb-2">Galería Privada</h3>
+                  <p className="text-sm text-muted-foreground mb-6 font-sans">
+                    Inicia sesión para ver todas las fotos de nuestra historia y compartir las tuyas.
+                  </p>
+                  <Button
+                    onClick={() => window.location.href = getLoginUrl()}
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-serif shadow-md"
+                  >
+                    <Users className="mr-2" size={18} />
+                    Iniciar Sesión
+                  </Button>
                 </div>
-                <h3 className="font-serif text-xl font-bold text-foreground mb-2">Galería Privada</h3>
-                <p className="text-sm text-muted-foreground mb-6 font-sans">
-                  Inicia sesión para ver todas las fotos de nuestra historia y compartir las tuyas.
-                </p>
-                <Button
-                  onClick={() => window.location.href = getLoginUrl()}
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-serif shadow-md"
-                >
-                  <Users className="mr-2" size={18} />
-                  Iniciar Sesión
-                </Button>
-              </div>
+              ) : (
+                <div className="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-primary/20 text-center max-w-sm mx-4 transform transition-transform hover:scale-105 pointer-events-auto mb-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Gem className="text-primary" size={24} />
+                  </div>
+                  <h3 className="font-serif text-xl font-bold text-foreground mb-2">Galería Oficial</h3>
+                  <p className="text-sm text-muted-foreground mb-6 font-sans">
+                    Ya tienes acceso. Descubre la mesa de regalos interactiva y comparte tus fotos de la boda.
+                  </p>
+                  <Button
+                    onClick={() => {
+                      window.location.href = "/mi-galeria";
+                    }}
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-serif shadow-md"
+                  >
+                    <PartyPopper className="mr-2" size={18} />
+                    Ir a la Galería Oficial
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </div>
