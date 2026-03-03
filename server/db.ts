@@ -1,7 +1,7 @@
 import { eq, desc, sql, and } from "drizzle-orm";
 import mysql from "mysql2/promise";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, rsvps, companions, weddingPhotos, preWeddingPhotos, invitations, songRequests, InsertRSVP, InsertCompanion, InsertWeddingPhoto, InsertPreWeddingPhoto, InsertSongRequest } from "../drizzle/schema";
+import { InsertUser, users, rsvps, companions, weddingPhotos, preWeddingPhotos, invitations, songRequests, InsertRSVP, InsertCompanion, InsertWeddingPhoto, InsertPreWeddingPhoto, InsertSongRequest, gifts, InsertGift } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: any = null;
@@ -189,4 +189,43 @@ export async function getSongRequests() {
   const db = await getDb();
   if (!db) return [];
   return await db.select().from(songRequests).orderBy(desc(songRequests.createdAt));
+}
+
+export async function getGifts() {
+  const db = await getDb();
+  if (!db) return [];
+  // Return all gifts, we can sort them alphabetically
+  return await db.select().from(gifts).orderBy(gifts.name);
+}
+
+export async function createGift(giftData: InsertGift) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.insert(gifts).values(giftData);
+}
+
+export async function claimGift(giftId: number, userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Verify it's not already claimed
+  const [gift] = await db.select().from(gifts).where(eq(gifts.id, giftId));
+  if (!gift) throw new Error("Gift not found");
+  if (gift.claimedByUserId) throw new Error("Gift already claimed");
+
+  await db.update(gifts).set({ claimedByUserId: userId }).where(eq(gifts.id, giftId));
+  return { success: true };
+}
+
+export async function unclaimGift(giftId: number, userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Verify it's claimed by this user
+  const [gift] = await db.select().from(gifts).where(eq(gifts.id, giftId));
+  if (!gift) throw new Error("Gift not found");
+  if (gift.claimedByUserId !== userId) throw new Error("You can only unclaim your own gifts");
+
+  await db.update(gifts).set({ claimedByUserId: null }).where(eq(gifts.id, giftId));
+  return { success: true };
 }

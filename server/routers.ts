@@ -5,7 +5,7 @@ import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { sql } from "drizzle-orm";
 import { users } from "../drizzle/schema";
-import { createRSVP, getRSVPByUserId, updateRSVP, getWeddingPhotos, getPreWeddingPhotos, getInvitationBySlug, getSongRequests, createSongRequest, getDb } from "./db";
+import { createRSVP, getRSVPByUserId, updateRSVP, getWeddingPhotos, getPreWeddingPhotos, getInvitationBySlug, getSongRequests, createSongRequest, getGifts, claimGift, unclaimGift, getDb } from "./db";
 
 export const appRouter = router({
   system: systemRouter,
@@ -159,6 +159,25 @@ export const appRouter = router({
     getRequestedSongs: publicProcedure
       .query(async () => {
         return await getSongRequests();
+      })
+  }),
+
+  gifts: router({
+    getGifts: publicProcedure
+      .query(async () => {
+        return await getGifts();
+      }),
+
+    claim: protectedProcedure
+      .input(z.object({ giftId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        return await claimGift(input.giftId, ctx.user.id);
+      }),
+
+    unclaim: protectedProcedure
+      .input(z.object({ giftId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        return await unclaimGift(input.giftId, ctx.user.id);
       })
   }),
 });

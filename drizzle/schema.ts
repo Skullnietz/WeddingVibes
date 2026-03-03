@@ -132,3 +132,16 @@ export const songRequests = mysqlTable("songRequests", {
 
 export type SongRequest = typeof songRequests.$inferSelect;
 export type InsertSongRequest = typeof songRequests.$inferInsert;
+
+/**
+ * Gift Registry
+ */
+export const gifts = mysqlTable("gifts", {
+  id: int("id").primaryKey().autoincrement(),
+  name: varchar("name", { length: 255 }).notNull(),
+  claimedByUserId: int("claimedByUserId"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Gift = typeof gifts.$inferSelect;
+export type InsertGift = typeof gifts.$inferInsert;

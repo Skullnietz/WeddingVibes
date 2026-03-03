@@ -1,11 +1,12 @@
 import { useState, useCallback, useEffect } from "react";
-import { Upload, Image as ImageIcon, CheckCircle, Clock } from "lucide-react";
+import { Upload, Image as ImageIcon, CheckCircle, Clock, Gift } from "lucide-react";
 import { useAuth } from "../_core/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { trpc } from "../lib/trpc";
 
 export default function MyGallery() {
     const { user, isAuthenticated } = useAuth();
@@ -14,6 +15,31 @@ export default function MyGallery() {
     const [preview, setPreview] = useState<string | null>(null);
     const [isUploading, setIsUploading] = useState(false);
     const [myPhotos, setMyPhotos] = useState<any[]>([]);
+
+    const utils = trpc.useUtils();
+    const { data: gifts = [], isLoading: loadingGifts } = trpc.gifts.getGifts.useQuery(undefined, {
+        enabled: isAuthenticated
+    });
+
+    const claimGiftMutation = trpc.gifts.claim.useMutation({
+        onSuccess: () => {
+            toast.success("¡Regalo reservado con éxito! Gracias.");
+            utils.gifts.getGifts.invalidate();
+        },
+        onError: (err) => {
+            toast.error(err.message || "No se pudo reservar el regalo.");
+        }
+    });
+
+    const unclaimGiftMutation = trpc.gifts.unclaim.useMutation({
+        onSuccess: () => {
+            toast.success("Reservación cancelada.");
+            utils.gifts.getGifts.invalidate();
+        },
+        onError: (err) => {
+            toast.error(err.message || "No se pudo cancelar la reservación.");
+        }
+    });
 
     // Redirigir si no ha iniciado sesión
     useEffect(() => {
@@ -140,6 +166,76 @@ export default function MyGallery() {
                         )}
                     </CardContent>
                 </Card>
+
+                {/* Gift Registry Section */}
+                <h2 className="font-serif text-2xl font-bold text-primary mb-2 flex items-center gap-2">
+                    <Gift className="text-primary" /> Lista de Regalos Sugeridos
+                </h2>
+                <p className="text-muted-foreground font-sans mb-6">
+                    Si deseas hacernos un obsequio, aquí te compartimos algunas sugerencias. Puedes elegir un regalo de la lista para evitar repeticiones. ¡Muchas gracias!
+                </p>
+
+                {loadingGifts ? (
+                    <div className="text-center py-12 text-muted-foreground bg-muted/10 rounded-lg mb-12">
+                        Cargando lista de regalos...
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
+                        <AnimatePresence>
+                            {gifts.map((gift: any, i: number) => {
+                                const isClaimed = gift.claimedByUserId !== null;
+                                const isClaimedByMe = gift.claimedByUserId === user?.id;
+
+                                return (
+                                    <motion.div
+                                        key={gift.id}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.3, delay: i * 0.05 }}
+                                    >
+                                        <Card className={`h-full border ${isClaimedByMe ? 'border-primary bg-primary/5' : isClaimed ? 'border-muted bg-muted/20 opacity-70' : 'border-primary/20 hover:border-primary/50'} transition-all`}>
+                                            <CardContent className="p-5 flex flex-col justify-between h-full">
+                                                <div>
+                                                    <h3 className={`font-serif text-lg font-bold mb-2 ${isClaimed && !isClaimedByMe ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+                                                        {gift.name}
+                                                    </h3>
+                                                </div>
+                                                <div className="mt-4">
+                                                    {isClaimedByMe ? (
+                                                        <Button
+                                                            variant="outline"
+                                                            className="w-full border-primary/50 text-primary hover:bg-primary/10"
+                                                            onClick={() => unclaimGiftMutation.mutate({ giftId: gift.id })}
+                                                            disabled={unclaimGiftMutation.isPending}
+                                                        >
+                                                            Cancelar Reserva
+                                                        </Button>
+                                                    ) : isClaimed ? (
+                                                        <Button
+                                                            variant="secondary"
+                                                            className="w-full bg-muted text-muted-foreground cursor-not-allowed"
+                                                            disabled
+                                                        >
+                                                            Reservado
+                                                        </Button>
+                                                    ) : (
+                                                        <Button
+                                                            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm"
+                                                            onClick={() => claimGiftMutation.mutate({ giftId: gift.id })}
+                                                            disabled={claimGiftMutation.isPending}
+                                                        >
+                                                            Elegir Regalo
+                                                        </Button>
+                                                    )}
+                                                </div>
+                                            </CardContent>
+                                        </Card>
+                                    </motion.div>
+                                );
+                            })}
+                        </AnimatePresence>
+                    </div>
+                )}
 
                 {/* My Uploads Grid */}
                 <h2 className="font-serif text-2xl font-bold text-primary mb-6">Mis Fotos ({myPhotos.length})</h2>
