@@ -42,8 +42,9 @@ export default function SpotifyPlayer() {
         }
     };
 
-    const transferPlaybackHere = async (deviceId: string, token: string) => {
+    const startWeddingPlaylist = async (deviceId: string, token: string) => {
         try {
+            // 1. Transfer playback to this device first so Spotify knows where to route the audio
             await fetch('https://api.spotify.com/v1/me/player', {
                 method: 'PUT',
                 headers: {
@@ -55,8 +56,23 @@ export default function SpotifyPlayer() {
                     play: false,
                 }),
             });
+
+            // 2. Give the transfer a tiny delay to register, then command it to play the specific playlist
+            setTimeout(async () => {
+                await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        context_uri: 'spotify:playlist:4bl2WwIx291W46C25nixgY'
+                    }),
+                });
+            }, 500);
+
         } catch (err) {
-            console.error("Failed to transfer playback:", err);
+            console.error("Failed to start wedding playlist:", err);
         }
     };
 
@@ -78,8 +94,8 @@ export default function SpotifyPlayer() {
             spotifyPlayer.addListener('ready', ({ device_id }: { device_id: string }) => {
                 console.log('Ready with Device ID', device_id);
                 setIsLoading(false);
-                // Automatically transfer playback to this device
-                transferPlaybackHere(device_id, token);
+                // Automatically transfer playback and start the wedding playlist
+                startWeddingPlaylist(device_id, token);
             });
 
             // Not Ready
