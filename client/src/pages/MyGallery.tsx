@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Heart, Gift, Upload, Camera, Copy, Check, ChevronRight, ChevronLeft, X, Info, Lock, Clock, CheckCircle, HelpCircle, Play, Pause, FastForward, SkipBack, CalendarCheck } from "lucide-react";
+import { Heart, Gift, Upload, Camera, Copy, Check, ChevronRight, ChevronLeft, X, Info, Lock, Clock, CheckCircle, HelpCircle, Play, Pause, FastForward, SkipBack, CalendarCheck, ShoppingCart } from "lucide-react";
 import { useAuth } from "../_core/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ export default function MyGallery() {
     const [isUploading, setIsUploading] = useState(false);
     const [myPhotos, setMyPhotos] = useState<any[]>([]);
     const [isChangingGift, setIsChangingGift] = useState(false);
+    const [showPurchaseLinks, setShowPurchaseLinks] = useState(false);
 
     // Tour State
     const [tourStep, setTourStep] = useState(0); // 0 means closed, 1, 2, 3 are the steps
@@ -560,7 +561,7 @@ export default function MyGallery() {
                                 <h3 className="font-serif text-2xl text-foreground mb-2">¡Elegiste este increíble obsequio!</h3>
                                 <p className="text-muted-foreground text-lg">Muchas gracias por tu generosidad. Apreciamos enormemente este detalle que formará parte de nuestro nuevo hogar.</p>
                             </div>
-                            <Card className="relative overflow-hidden h-80 sm:h-[450px] border border-primary/20 shadow-2xl rounded-2xl group mx-auto">
+                            <Card className={`relative overflow-hidden transition-all duration-500 border border-primary/20 shadow-2xl rounded-2xl group mx-auto ${showPurchaseLinks ? 'h-[550px] sm:h-[500px]' : 'h-80 sm:h-[450px]'}`}>
                                 {/* Background Image */}
                                 <div
                                     className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
@@ -569,12 +570,25 @@ export default function MyGallery() {
                                 {/* Gradient Overlay */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10" />
 
-                                <CardContent className="relative h-full p-8 sm:p-12 flex flex-col justify-end z-10 text-center">
-                                    <h3 className="font-serif text-3xl sm:text-5xl leading-tight font-bold text-white mb-8 drop-shadow-xl">
+                                {/* Extra Dark Overlay for purchase links */}
+                                <div className={`absolute inset-0 bg-black/70 transition-opacity duration-500 pointer-events-none z-0 ${showPurchaseLinks ? 'opacity-100' : 'opacity-0'}`} />
+
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className={`absolute top-4 right-4 z-20 transition-all duration-300 rounded-full backdrop-blur-md border-white/30 shadow-lg ${showPurchaseLinks ? 'bg-white text-black hover:scale-110' : 'bg-black/40 text-white hover:bg-black/60 hover:scale-110'}`}
+                                    onClick={() => setShowPurchaseLinks(!showPurchaseLinks)}
+                                    title="Opciones de compra"
+                                >
+                                    <HelpCircle size={24} />
+                                </Button>
+
+                                <CardContent className="relative h-full p-8 sm:p-12 flex flex-col justify-end z-10 text-center transition-all duration-500">
+                                    <h3 className={`font-serif text-3xl sm:text-5xl leading-tight font-bold text-white drop-shadow-xl transition-all duration-500 ${showPurchaseLinks ? 'mb-4' : 'mb-8'}`}>
                                         {myClaimedGift.name}
                                     </h3>
 
-                                    <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center">
+                                    <div className="flex flex-col sm:flex-row gap-4 mt-2 justify-center transition-all duration-500">
                                         <Button
                                             className="bg-white/95 hover:bg-white text-black shadow-xl font-serif text-lg py-6 px-8 rounded-xl transition-all hover:scale-105"
                                             onClick={() => setIsChangingGift(true)}
@@ -590,6 +604,33 @@ export default function MyGallery() {
                                             Liberar Regalo
                                         </Button>
                                     </div>
+
+                                    <AnimatePresence>
+                                        {showPurchaseLinks && (
+                                            <motion.div
+                                                initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                                                animate={{ opacity: 1, height: 'auto', marginTop: 24 }}
+                                                exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                                                className="overflow-hidden flex flex-col sm:flex-row gap-3 justify-center items-center w-full"
+                                            >
+                                                <a href={`https://www.amazon.com.mx/s?k=${encodeURIComponent(myClaimedGift.name)}`} target="_blank" rel="noreferrer" className="flex-1 w-full sm:w-auto">
+                                                    <Button className="w-full bg-[#FF9900] hover:bg-[#e88a00] text-black font-bold shadow-lg flex items-center justify-center gap-2 py-6 rounded-xl text-md transition-all hover:scale-105">
+                                                        <ShoppingCart size={20} /> Amazon
+                                                    </Button>
+                                                </a>
+                                                <a href={`https://listado.mercadolibre.com.mx/${encodeURIComponent(myClaimedGift.name)}`} target="_blank" rel="noreferrer" className="flex-1 w-full sm:w-auto">
+                                                    <Button className="w-full bg-[#FFE600] hover:bg-[#e6d000] text-[#2D3277] font-bold shadow-lg flex items-center justify-center gap-2 py-6 rounded-xl text-md transition-all hover:scale-105">
+                                                        <ShoppingCart size={20} /> MercadoLibre
+                                                    </Button>
+                                                </a>
+                                                <a href={`https://www.liverpool.com.mx/tienda?s=${encodeURIComponent(myClaimedGift.name)}`} target="_blank" rel="noreferrer" className="flex-1 w-full sm:w-auto">
+                                                    <Button className="w-full bg-[#E10098] hover:bg-[#c40084] text-white font-bold shadow-lg flex items-center justify-center gap-2 py-6 rounded-xl text-md transition-all hover:scale-105">
+                                                        <ShoppingCart size={20} /> Liverpool
+                                                    </Button>
+                                                </a>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                 </CardContent>
                             </Card>
                         </motion.div>
