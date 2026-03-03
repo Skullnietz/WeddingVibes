@@ -815,9 +815,14 @@ function RSVPSection() {
               {/* Form Actions */}
               {existingRsvp && formData.isAttending ? (
                 <div className="space-y-4 pt-4 border-t border-border/50">
-                  <div className="flex items-center justify-center gap-2 p-4 bg-green-500/10 text-green-600 rounded-lg">
-                    <CheckCircle size={20} />
-                    <span className="font-serif font-semibold">¡Ya confirmaste tu asistencia!</span>
+                  <div className="flex flex-col items-center justify-center p-4 bg-green-500/10 text-green-700 rounded-lg">
+                    <div className="flex items-center gap-2 mb-1">
+                      <CheckCircle size={20} className="text-green-600" />
+                      <span className="font-serif font-semibold text-lg text-green-600">¡Ya confirmaste tu asistencia!</span>
+                    </div>
+                    <span className="text-sm font-sans mt-1">
+                      Lugar reservado para <strong>{1 + (existingRsvp.numberOfCompanions || 0)}</strong> {1 + (existingRsvp.numberOfCompanions || 0) === 1 ? 'persona' : 'personas'}.
+                    </span>
                   </div>
                   <Button
                     type="submit"
