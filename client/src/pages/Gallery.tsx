@@ -201,9 +201,6 @@ export default function Gallery() {
           <div className="mt-16">
             <SongRequestBox />
           </div>
-
-          {/* Persistent global player for the Gallery */}
-          <SpotifyPlayer />
         </div>
       )}
 
@@ -301,6 +298,9 @@ export default function Gallery() {
           </div>
         </div>
       )}
+
+      {/* Persistent global player for the Gallery */}
+      <SpotifyPlayer />
     </div>
   );
 }

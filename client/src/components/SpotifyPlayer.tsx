@@ -133,7 +133,7 @@ export default function SpotifyPlayer() {
     // State 1: Login Required
     if (tokenError) {
         return (
-            <div className="absolute bottom-0 left-0 right-0 bg-background/80 backdrop-blur-xl border-t border-border p-4 z-[60]">
+            <div className="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-xl border-t border-border p-4 z-[60]">
                 <div className="container max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-[#1DB954]/20 flex items-center justify-center">
@@ -160,7 +160,7 @@ export default function SpotifyPlayer() {
     // State 2: Loading SDK Handshake
     if (isLoading) {
         return (
-            <div className="absolute bottom-0 left-0 right-0 bg-background/80 backdrop-blur-xl border-t border-border p-4 z-[60] flex items-center justify-center min-h-[80px]">
+            <div className="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-xl border-t border-border p-4 z-[60] flex items-center justify-center min-h-[80px]">
                 <Loader2 className="w-6 h-6 text-[#1DB954] animate-spin mr-3" />
                 <p className="text-sm font-serif text-muted-foreground animate-pulse">Sincronizando con Spotify...</p>
             </div>
@@ -169,7 +169,7 @@ export default function SpotifyPlayer() {
 
     // State 3: Active Player Widget (Bottom Docked)
     return (
-        <div className="absolute bottom-0 left-0 right-0 bg-background/90 backdrop-blur-xl border-t border-border p-3 sm:p-4 z-[60] shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+        <div className="fixed bottom-0 left-0 right-0 bg-background/90 backdrop-blur-xl border-t border-border p-3 sm:p-4 z-[60] shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
             <div className="container max-w-4xl mx-auto flex items-center justify-between gap-4">
 
                 {/* Track Info */}
