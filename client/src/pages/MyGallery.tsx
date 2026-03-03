@@ -202,55 +202,59 @@ export default function MyGallery() {
             {/* Custom Interactive Tour Overlay */}
             <AnimatePresence>
                 {tourStep > 0 && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 pointer-events-none flex flex-col items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-                    >
+                    <>
+                        {/* Dark Backdrop (z-50) */}
                         <motion.div
-                            initial={{ scale: 0.9, y: 20 }}
-                            animate={{ scale: 1, y: 0 }}
-                            exit={{ scale: 0.9, y: 20 }}
-                            className="bg-white/95 dark:bg-zinc-900/95 border border-primary/20 p-6 sm:p-8 rounded-2xl shadow-2xl max-w-sm sm:max-w-md w-full pointer-events-auto relative mt-[40vh]"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-50 pointer-events-none bg-black/60 backdrop-blur-sm"
+                        />
+
+                        {/* Dialog (z-60) fixed at the bottom to avoid hiding the highlighted element */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 50, x: "-50%" }}
+                            animate={{ opacity: 1, y: 0, x: "-50%" }}
+                            exit={{ opacity: 0, y: 50, x: "-50%" }}
+                            className="fixed bottom-6 sm:bottom-12 left-1/2 z-[60] bg-white/95 dark:bg-zinc-900/95 border border-primary/20 p-6 sm:p-8 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] max-w-sm sm:max-w-md w-[calc(100%-2rem)] pointer-events-auto"
                         >
-                            <button onClick={closeTour} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">
+                            <button onClick={closeTour} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors">
                                 <X size={20} />
                             </button>
 
                             <div className="mb-6">
-                                <h3 className="font-serif text-2xl font-bold text-primary mb-3">
+                                <h3 className="font-serif text-2xl font-bold text-primary mb-3 pr-6">
                                     {tourStep === 1 && "Mesa de Regalos"}
                                     {tourStep === 2 && "Compartir Fotografías"}
                                     {tourStep === 3 && "Tus Colecciones"}
                                 </h3>
                                 <p className="text-muted-foreground text-[15px] leading-relaxed">
-                                    {tourStep === 1 && "¡Hola! Si lo deseas, puedes elegir uno de los obsequios de nuestra mesa de regalos. Es totalmente opcional, pero agradecemos muchísimo cualquier lindo detalle. Solo necesitas darle click en 'Elegir Regalo' o en nuestra opción principal."}
-                                    {tourStep === 2 && "¡Queremos ver la boda desde tus ojos! En esta sección podrás subir todas las increíbles fotografías que captures durante nuestro evento. ¡Comparte tus mejores momentos con nosotros!"}
-                                    {tourStep === 3 && "Aquí aparecerán todas las fotos que hayas subido. Podrás ver y revisar el estado de cada una, ya sea que han sido 'aprobadas' para salir en la galería oficial o se encuentren 'pendientes'. ¡Gracias por ser parte de nuestra historia!"}
+                                    {tourStep === 1 && "¡Hola! Si lo deseas, puedes elegir uno de los obsequios de nuestra mesa de regalos. Es totalmente opcional, pero agradecemos muchísimo cualquier lindo detalle."}
+                                    {tourStep === 2 && "¡Queremos ver la boda desde tus ojos! En esta sección podrás subir todas las increíbles fotografías que captures durante nuestro evento."}
+                                    {tourStep === 3 && "Aquí aparecerán todas las fotos que hayas subido. Podrás ver y revisar el estado de cada una, ya sea que han sido 'aprobadas' o 'pendientes'."}
                                 </p>
                             </div>
 
-                            <div className="flex items-center justify-between">
-                                <div className="flex gap-1.5">
-                                    <div className={`h-2 w-2 rounded-full ${tourStep === 1 ? 'bg-primary' : 'bg-primary/20'}`} />
-                                    <div className={`h-2 w-2 rounded-full ${tourStep === 2 ? 'bg-primary' : 'bg-primary/20'}`} />
-                                    <div className={`h-2 w-2 rounded-full ${tourStep === 3 ? 'bg-primary' : 'bg-primary/20'}`} />
+                            <div className="flex items-center justify-between mt-2">
+                                <div className="flex gap-2">
+                                    <div className={`h-2.5 w-2.5 rounded-full transition-colors ${tourStep === 1 ? 'bg-primary' : 'bg-primary/20'}`} />
+                                    <div className={`h-2.5 w-2.5 rounded-full transition-colors ${tourStep === 2 ? 'bg-primary' : 'bg-primary/20'}`} />
+                                    <div className={`h-2.5 w-2.5 rounded-full transition-colors ${tourStep === 3 ? 'bg-primary' : 'bg-primary/20'}`} />
                                 </div>
 
                                 <div className="flex gap-2">
                                     {tourStep > 1 && (
-                                        <Button variant="outline" size="sm" onClick={prevTourStep}>
-                                            <ChevronLeft size={16} /> Atrás
+                                        <Button variant="outline" size="sm" onClick={prevTourStep} className="font-serif">
+                                            <ChevronLeft size={16} className="mr-1" /> Atrás
                                         </Button>
                                     )}
-                                    <Button size="sm" onClick={nextTourStep} className="font-serif">
-                                        {tourStep === 3 ? "¡Entendido!" : "Siguiente"} {tourStep !== 3 && <ChevronRight size={16} />}
+                                    <Button size="sm" onClick={nextTourStep} className="font-serif shadow-md">
+                                        {tourStep === 3 ? "¡Entendido!" : "Siguiente"} {tourStep !== 3 && <ChevronRight size={16} className="ml-1" />}
                                     </Button>
                                 </div>
                             </div>
                         </motion.div>
-                    </motion.div>
+                    </>
                 )}
             </AnimatePresence>
 
