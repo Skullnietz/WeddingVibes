@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { trpc } from "../lib/trpc";
 
 export default function MyGallery() {
-    const { user, isAuthenticated } = useAuth();
+    const { user, isAuthenticated, loading } = useAuth();
     const [, navigate] = useLocation();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
@@ -51,8 +51,8 @@ export default function MyGallery() {
 
     // Redirigir si no ha iniciado sesión
     useEffect(() => {
-        if (!isAuthenticated) navigate("/");
-    }, [isAuthenticated, navigate]);
+        if (!loading && !isAuthenticated) navigate("/");
+    }, [loading, isAuthenticated, navigate]);
 
     // Initialize Tour
     useEffect(() => {
