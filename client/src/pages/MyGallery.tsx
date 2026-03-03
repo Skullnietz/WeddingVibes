@@ -193,7 +193,12 @@ export default function MyGallery() {
                     </p>
                     <Button
                         size="lg"
-                        onClick={() => window.location.href = "/#rsvp"}
+                        onClick={() => {
+                            navigate("/");
+                            setTimeout(() => {
+                                document.getElementById("rsvp")?.scrollIntoView({ behavior: "smooth" });
+                            }, 500); // 500ms allows the Next page to load before scrolling
+                        }}
                         className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-md font-serif text-lg py-6"
                     >
                         <CalendarCheck className="mr-3" size={20} />
