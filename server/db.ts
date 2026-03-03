@@ -1,4 +1,4 @@
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
 import mysql from "mysql2/promise";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, rsvps, companions, weddingPhotos, preWeddingPhotos, invitations, songRequests, InsertRSVP, InsertCompanion, InsertWeddingPhoto, InsertPreWeddingPhoto, InsertSongRequest } from "../drizzle/schema";
@@ -41,12 +41,6 @@ export async function getDb() {
   return _db;
 }
 
-function toMySQLDate(d: Date = new Date()) {
-  const date = new Date(d);
-  date.setMilliseconds(0);
-  return date;
-}
-
 export async function upsertUser(user: InsertUser): Promise<void> {
   if (!user.openId) {
     throw new Error("User openId is required for upsert");
@@ -61,12 +55,8 @@ export async function upsertUser(user: InsertUser): Promise<void> {
   try {
     const values: InsertUser = {
       openId: user.openId,
-      createdAt: toMySQLDate(),
-      updatedAt: toMySQLDate(),
     };
-    const updateSet: Record<string, unknown> = {
-      updatedAt: toMySQLDate(),
-    };
+    const updateSet: Record<string, unknown> = {};
 
     const textFields = ["name", "email", "loginMethod"] as const;
     type TextField = (typeof textFields)[number];
@@ -82,9 +72,8 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     textFields.forEach(assignNullable);
 
     if (user.lastSignedIn !== undefined) {
-      const dbDate = toMySQLDate(user.lastSignedIn as Date);
-      values.lastSignedIn = dbDate;
-      updateSet.lastSignedIn = dbDate;
+      values.lastSignedIn = sql`NOW()` as any;
+      updateSet.lastSignedIn = sql`NOW()`;
     }
     if (user.role !== undefined) {
       values.role = user.role;
@@ -95,11 +84,11 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     }
 
     if (!values.lastSignedIn) {
-      values.lastSignedIn = toMySQLDate();
+      values.lastSignedIn = sql`NOW()` as any;
     }
 
     if (Object.keys(updateSet).length === 0 || updateSet.lastSignedIn === undefined) {
-      updateSet.lastSignedIn = toMySQLDate();
+      updateSet.lastSignedIn = sql`NOW()`;
     }
 
     await db.insert(users).values(values).onDuplicateKeyUpdate({
