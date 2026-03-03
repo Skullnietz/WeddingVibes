@@ -631,6 +631,7 @@ function RSVPSection() {
     onSuccess: () => {
       toast.success("¡Gracias por confirmar tu asistencia!");
       utils.rsvp.getByUser.invalidate();
+      localStorage.removeItem("hasSeenGalleryTour");
       setTimeout(() => navigate("/mi-galeria"), 1000);
     },
     onError: (err) => {
@@ -642,6 +643,7 @@ function RSVPSection() {
     onSuccess: () => {
       toast.success("¡Tu confirmación ha sido actualizada con éxito!");
       utils.rsvp.getByUser.invalidate();
+      localStorage.removeItem("hasSeenGalleryTour");
       setTimeout(() => navigate("/mi-galeria"), 1000);
     },
     onError: (err) => {
