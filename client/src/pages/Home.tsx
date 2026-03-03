@@ -119,7 +119,7 @@ const CountdownBox = ({ value, label }: { value: number; label: string }) => (
 function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [, navigate] = useLocation();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
   const sections = [
     { id: "inicio", label: "Inicio" },
@@ -160,12 +160,27 @@ function Navigation() {
               {section.label}
             </button>
           ))}
-          {isAuthenticated && (
+          {isAuthenticated ? (
+            <>
+              <button
+                onClick={() => navigate("/galeria")}
+                className="text-sm font-sans text-primary font-semibold"
+              >
+                Mi Galería
+              </button>
+              <button
+                onClick={() => logout()}
+                className="text-sm font-sans text-destructive hover:text-destructive/80 font-semibold transition-colors"
+              >
+                Cerrar Sesión
+              </button>
+            </>
+          ) : (
             <button
-              onClick={() => navigate("/galeria")}
-              className="text-sm font-sans text-primary font-semibold"
+              onClick={() => window.location.href = getLoginUrl()}
+              className="text-sm font-sans text-primary font-semibold hover:text-primary/80 transition-colors"
             >
-              Mi Galería
+              Iniciar Sesión
             </button>
           )}
         </div>
@@ -195,12 +210,27 @@ function Navigation() {
                   {section.label}
                 </button>
               ))}
-              {isAuthenticated && (
+              {isAuthenticated ? (
+                <>
+                  <button
+                    onClick={() => { navigate("/galeria"); setIsOpen(false); }}
+                    className="text-sm font-sans text-primary font-semibold text-left"
+                  >
+                    Mi Galería
+                  </button>
+                  <button
+                    onClick={() => { logout(); setIsOpen(false); }}
+                    className="text-sm font-sans text-destructive hover:text-destructive/80 font-semibold text-left transition-colors"
+                  >
+                    Cerrar Sesión
+                  </button>
+                </>
+              ) : (
                 <button
-                  onClick={() => navigate("/galeria")}
-                  className="text-sm font-sans text-primary font-semibold text-left"
+                  onClick={() => window.location.href = getLoginUrl()}
+                  className="text-sm font-sans text-primary font-semibold hover:text-primary/80 text-left transition-colors"
                 >
-                  Mi Galería
+                  Iniciar Sesión
                 </button>
               )}
             </div>
