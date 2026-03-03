@@ -1002,10 +1002,33 @@ function ClosingSection() {
   );
 }
 
+function DbStatusIndicator() {
+  const { data, isLoading } = trpc.db.checkConnection.useQuery(undefined, {
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+
+  if (isLoading) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className={`fixed bottom-4 right-4 z-[100] px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg backdrop-blur-md border flex items-center gap-2 transition-all ${data?.connected
+          ? "bg-green-500/10 text-green-600 border-green-500/20 dark:text-green-400"
+          : "bg-red-500/10 text-red-600 border-red-500/20 dark:text-red-400"
+        }`}
+    >
+      <div className={`w-2 h-2 rounded-full ${data?.connected ? "bg-green-500 animate-pulse" : "bg-red-500"}`} />
+      <span className="opacity-90">{data?.connected ? data.message : "Sin conexión a B.D."}</span>
+    </motion.div>
+  );
+}
+
 // Componente Principal
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background scroll-smooth">
+    <div className="min-h-screen bg-background scroll-smooth relative">
       <Navigation />
       <HeroSection />
       <DetailsSection />
@@ -1014,6 +1037,7 @@ export default function Home() {
       <GiftsSection />
       <FAQSection />
       <ClosingSection />
+      <DbStatusIndicator />
     </div>
   );
 }

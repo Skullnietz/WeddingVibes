@@ -3,10 +3,26 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
-import { createRSVP, getRSVPByUserId, updateRSVP, getWeddingPhotos, getPreWeddingPhotos, getInvitationBySlug, getSongRequests, createSongRequest } from "./db";
+import { sql } from "drizzle-orm";
+import { users } from "../drizzle/schema";
+import { createRSVP, getRSVPByUserId, updateRSVP, getWeddingPhotos, getPreWeddingPhotos, getInvitationBySlug, getSongRequests, createSongRequest, getDb } from "./db";
 
 export const appRouter = router({
   system: systemRouter,
+  db: router({
+    checkConnection: publicProcedure.query(async () => {
+      try {
+        const db = await getDb();
+        if (!db) return { connected: false, message: "No database instance available" };
+
+        // Execute a lightweight query to test the connection
+        const result = await db.select({ count: sql`count(*)` }).from(users);
+        return { connected: true, message: `Connected (Users: ${result[0]?.count || 0})` };
+      } catch (err: any) {
+        return { connected: false, message: err?.message || "Connection failed" };
+      }
+    }),
+  }),
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {
