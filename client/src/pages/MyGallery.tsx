@@ -166,42 +166,7 @@ export default function MyGallery() {
                     )}
                 </header>
 
-                {/* Upload Zone */}
-                <Card className="mb-12 border-dashed border-2 bg-muted/20">
-                    <CardContent className="p-8 flex flex-col items-center justify-center text-center">
-                        {preview ? (
-                            <div className="w-full max-w-md mx-auto relative group">
-                                <img src={preview} alt="Vista previa" className="w-full h-auto rounded-lg shadow-md mb-4" />
-                                <div className="flex gap-4 justify-center">
-                                    <Button variant="outline" onClick={clearSelection} disabled={isUploading}>
-                                        Cancelar
-                                    </Button>
-                                    <Button onClick={handleUpload} disabled={isUploading} className="bg-primary group-hover:bg-primary/90">
-                                        {isUploading ? "Subiendo..." : "Subir Foto"}
-                                    </Button>
-                                </div>
-                            </div>
-                        ) : (
-                            <label className="cursor-pointer w-full flex flex-col items-center p-12 overflow-hidden">
-                                <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-4 transition-transform hover:scale-110">
-                                    <Upload size={32} />
-                                </div>
-                                <h3 className="font-serif text-xl font-semibold mb-2">Toca para subir una foto</h3>
-                                <p className="text-sm text-muted-foreground max-w-sm">
-                                    Formatos soportados: JPG, PNG. Tamaño máximo 20MB.
-                                </p>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleFileChange}
-                                    className="hidden"
-                                />
-                            </label>
-                        )}
-                    </CardContent>
-                </Card>
-
-                {/* Gift Registry Section (Grid View) - Before My Photos */}
+                {/* Gift Registry Section (Grid View) - AT THE VERY TOP */}
                 {showGridView && (
                     <div className="mb-12">
                         <h2 className="font-serif text-2xl font-bold text-primary mb-2 flex items-center gap-2">
@@ -306,6 +271,41 @@ export default function MyGallery() {
                         )}
                     </div>
                 )}
+
+                {/* Upload Zone */}
+                <Card className="mb-12 border-dashed border-2 bg-muted/20">
+                    <CardContent className="p-8 flex flex-col items-center justify-center text-center">
+                        {preview ? (
+                            <div className="w-full max-w-md mx-auto relative group">
+                                <img src={preview} alt="Vista previa" className="w-full h-auto rounded-lg shadow-md mb-4" />
+                                <div className="flex gap-4 justify-center">
+                                    <Button variant="outline" onClick={clearSelection} disabled={isUploading}>
+                                        Cancelar
+                                    </Button>
+                                    <Button onClick={handleUpload} disabled={isUploading} className="bg-primary group-hover:bg-primary/90">
+                                        {isUploading ? "Subiendo..." : "Subir Foto"}
+                                    </Button>
+                                </div>
+                            </div>
+                        ) : (
+                            <label className="cursor-pointer w-full flex flex-col items-center p-12 overflow-hidden">
+                                <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-4 transition-transform hover:scale-110">
+                                    <Upload size={32} />
+                                </div>
+                                <h3 className="font-serif text-xl font-semibold mb-2">Toca para subir una foto</h3>
+                                <p className="text-sm text-muted-foreground max-w-sm">
+                                    Formatos soportados: JPG, PNG. Tamaño máximo 20MB.
+                                </p>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    className="hidden"
+                                />
+                            </label>
+                        )}
+                    </CardContent>
+                </Card>
 
                 {/* My Uploads Grid */}
                 <h2 className="font-serif text-2xl font-bold text-primary mb-6">Mis Fotos ({myPhotos.length})</h2>
