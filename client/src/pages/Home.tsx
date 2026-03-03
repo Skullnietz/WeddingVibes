@@ -558,7 +558,7 @@ function GallerySection() {
                   </p>
                   <Button
                     onClick={() => {
-                      window.location.href = "/mi-galeria";
+                      window.location.href = "https://weddingvibes.com.mx/galeria";
                     }}
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-serif shadow-md"
                   >
