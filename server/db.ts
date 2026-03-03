@@ -195,7 +195,21 @@ export async function getGifts() {
   const db = await getDb();
   if (!db) return [];
   // Return all gifts, we can sort them alphabetically
-  return await db.select().from(gifts).orderBy(gifts.name);
+  // Join with users table to get details of who claimed the gift
+  const result = await db
+    .select({
+      id: gifts.id,
+      name: gifts.name,
+      claimedByUserId: gifts.claimedByUserId,
+      createdAt: gifts.createdAt,
+      claimerName: users.name,
+      claimerAvatar: sql<string | null>`NULL`, // Since no avatarUrl exists, we just return null
+    })
+    .from(gifts)
+    .leftJoin(users, eq(gifts.claimedByUserId, users.id))
+    .orderBy(gifts.name);
+
+  return result;
 }
 
 export async function createGift(giftData: InsertGift) {
@@ -208,11 +222,24 @@ export async function claimGift(giftId: number, userId: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
-  // Verify it's not already claimed
+  // Verify it's not already claimed by someone else
   const [gift] = await db.select().from(gifts).where(eq(gifts.id, giftId));
   if (!gift) throw new Error("Gift not found");
-  if (gift.claimedByUserId) throw new Error("Gift already claimed");
 
+  if (gift.claimedByUserId === userId) {
+    // User has already claimed this gift, no action needed.
+    return { success: true };
+  }
+
+  if (gift.claimedByUserId !== null) {
+    // Gift is claimed by someone else
+    throw new Error("Gift already claimed by another user");
+  }
+
+  // Release any previously claimed gifts by this user to enforce 1-gift per user
+  await db.update(gifts).set({ claimedByUserId: null }).where(eq(gifts.claimedByUserId, userId));
+
+  // Claim the new gift
   await db.update(gifts).set({ claimedByUserId: userId }).where(eq(gifts.id, giftId));
   return { success: true };
 }

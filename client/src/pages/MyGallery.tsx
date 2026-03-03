@@ -15,6 +15,7 @@ export default function MyGallery() {
     const [preview, setPreview] = useState<string | null>(null);
     const [isUploading, setIsUploading] = useState(false);
     const [myPhotos, setMyPhotos] = useState<any[]>([]);
+    const [isChangingGift, setIsChangingGift] = useState(false);
 
     const utils = trpc.useUtils();
     const { data: gifts = [], isLoading: loadingGifts } = trpc.gifts.getGifts.useQuery(undefined, {
@@ -24,6 +25,7 @@ export default function MyGallery() {
     const claimGiftMutation = trpc.gifts.claim.useMutation({
         onSuccess: () => {
             toast.success("¡Regalo reservado con éxito! Gracias.");
+            setIsChangingGift(false);
             utils.gifts.getGifts.invalidate();
         },
         onError: (err) => {
@@ -169,10 +171,10 @@ export default function MyGallery() {
 
                 {/* Gift Registry Section */}
                 <h2 className="font-serif text-2xl font-bold text-primary mb-2 flex items-center gap-2">
-                    <Gift className="text-primary" /> Lista de Regalos Sugeridos
+                    <Gift className="text-primary" /> Mesa de Regalos
                 </h2>
                 <p className="text-muted-foreground font-sans mb-6">
-                    Si deseas hacernos un obsequio, aquí te compartimos algunas sugerencias. Puedes elegir un regalo de la lista para evitar repeticiones. ¡Muchas gracias!
+                    Si deseas hacernos un obsequio, aquí te compartimos algunas sugerencias.
                 </p>
 
                 {loadingGifts ? (
@@ -180,100 +182,179 @@ export default function MyGallery() {
                         Cargando lista de regalos...
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
-                        <AnimatePresence>
-                            {gifts.map((gift: any, i: number) => {
-                                const isClaimed = gift.claimedByUserId !== null;
-                                const isClaimedByMe = gift.claimedByUserId === user?.id;
+                    <div className="mb-12">
+                        {(() => {
+                            const myClaimedGift = gifts.find((g: any) => g.claimedByUserId === user?.id);
 
-                                const getGiftImage = (name: string) => {
-                                    const n = name.toUpperCase();
-                                    if (n.includes("BATERIA")) return "/gifts/bateria_cocina.png";
-                                    if (n.includes("EDREDON")) return "/gifts/edredon_matrimonial.png";
-                                    if (n.includes("SABANAS")) return "/gifts/sabanas_matrimoniales.png";
-                                    if (n.includes("ALMOHADA")) return "/gifts/juego_almohadas.png";
-                                    if (n.includes("FREIDORA")) return "/gifts/freidora_aire.png";
-                                    if (n.includes("DISPENSADOR")) return "/gifts/dispensador_agua.png";
-                                    if (n.includes("VAJILLA")) return "/gifts/vajilla.png";
-                                    if (n.includes("CUBIERTOS")) return "/gifts/juego_cubiertos.png";
-                                    if (n.includes("SARTEN")) return "/gifts/sartenes.png";
-                                    if (n.includes("TOALLA")) return "/gifts/juego_toallas.png";
-                                    if (n.includes("CAFETERA")) return "/gifts/cafetera.png";
-                                    if (n.includes("DESPENSA")) return "/gifts/despensa.png";
-                                    if (n.includes("VELAS")) return "/gifts/velas_aromaticas.png";
-                                    if (n.includes("ESQUINERO")) return "/gifts/esquinero_bano.png";
-                                    if (n.includes("BAÑO")) return "/gifts/juego_bano.png";
-                                    if (n.includes("ESTUFA")) return "/gifts/estufa_electrica.png";
-                                    if (n.includes("BOILER")) return "/gifts/boiler_electrico.png";
-                                    if (n.includes("MALETAS")) return "/gifts/juego_maletas.png";
-                                    if (n.includes("LONCHERA")) return "/gifts/loncheras.png";
-                                    if (n.includes("LICUADORA")) return "/gifts/licuadora_portatil.png";
-                                    if (n.includes("COLCHON")) return "/gifts/colchon_inflable.png";
-                                    if (n.includes("CUCHILLOS")) return "/gifts/juego_cuchillos.png";
-                                    if (n.includes("KARCHER")) return "/gifts/karcher.png";
-                                    return "/gifts/bateria_cocina.png"; // Fallback
-                                }
+                            // HELPER: To get image for a gift
+                            const getGiftImage = (name: string) => {
+                                const n = name.toUpperCase();
+                                if (n.includes("BATERIA")) return "/gifts/bateria_cocina.png";
+                                if (n.includes("EDREDON")) return "/gifts/edredon_matrimonial.png";
+                                if (n.includes("SABANAS")) return "/gifts/sabanas_matrimoniales.png";
+                                if (n.includes("ALMOHADA")) return "/gifts/juego_almohadas.png";
+                                if (n.includes("FREIDORA")) return "/gifts/freidora_aire.png";
+                                if (n.includes("DISPENSADOR")) return "/gifts/dispensador_agua.png";
+                                if (n.includes("VAJILLA")) return "/gifts/vajilla.png";
+                                if (n.includes("CUBIERTOS")) return "/gifts/juego_cubiertos.png";
+                                if (n.includes("SARTEN")) return "/gifts/sartenes.png";
+                                if (n.includes("TOALLA")) return "/gifts/juego_toallas.png";
+                                if (n.includes("CAFETERA")) return "/gifts/cafetera.png";
+                                if (n.includes("DESPENSA")) return "/gifts/despensa.png";
+                                if (n.includes("VELAS")) return "/gifts/velas_aromaticas.png";
+                                if (n.includes("ESQUINERO")) return "/gifts/esquinero_bano.png";
+                                if (n.includes("BAÑO")) return "/gifts/juego_bano.png";
+                                if (n.includes("ESTUFA")) return "/gifts/estufa_electrica.png";
+                                if (n.includes("BOILER")) return "/gifts/boiler_electrico.png";
+                                if (n.includes("MALETAS")) return "/gifts/juego_maletas.png";
+                                if (n.includes("LONCHERA")) return "/gifts/loncheras.png";
+                                if (n.includes("LICUADORA")) return "/gifts/licuadora_portatil.png";
+                                if (n.includes("COLCHON")) return "/gifts/colchon_inflable.png";
+                                if (n.includes("CUCHILLOS")) return "/gifts/juego_cuchillos.png";
+                                if (n.includes("KARCHER")) return "/gifts/karcher.png";
+                                return "/gifts/bateria_cocina.png"; // Fallback
+                            };
 
-                                const imageUrl = getGiftImage(gift.name);
-
+                            // --- VIEW 1: USER HAS CLAIMED A GIFT AND IS NOT CHANGING IT ---
+                            if (myClaimedGift && !isChangingGift) {
+                                const imageUrl = getGiftImage(myClaimedGift.name);
                                 return (
                                     <motion.div
-                                        key={gift.id}
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.3, delay: i * 0.05 }}
-                                        className="h-full"
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ duration: 0.5 }}
+                                        className="w-full max-w-2xl mx-auto"
                                     >
-                                        <Card className={`relative overflow-hidden h-64 sm:h-72 border-0 group transition-all duration-500 rounded-xl shadow-md hover:shadow-xl ${isClaimed && !isClaimedByMe ? 'opacity-60 grayscale-[50%]' : ''}`}>
+                                        <div className="text-center mb-6">
+                                            <h3 className="font-serif text-2xl text-primary mb-2">¡Elegiste este increíble obsequio!</h3>
+                                            <p className="text-muted-foreground">Muchas gracias por tu amable aportación a nuestro nuevo hogar.</p>
+                                        </div>
+                                        <Card className="relative overflow-hidden h-80 sm:h-96 border border-primary/20 shadow-xl rounded-2xl group">
                                             {/* Background Image */}
                                             <div
                                                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
                                                 style={{ backgroundImage: `url(${imageUrl})` }}
                                             />
                                             {/* Gradient Overlay */}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 transition-opacity duration-300 group-hover:from-black/95" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
 
-                                            <CardContent className="relative h-full p-6 flex flex-col justify-end z-10">
-                                                <div className="transform transition-transform duration-300 translate-y-2 group-hover:translate-y-0">
-                                                    <h3 className={`font-serif text-2xl leading-tight font-bold text-white mb-4 drop-shadow-md ${isClaimed && !isClaimedByMe ? 'line-through text-white/70' : ''}`}>
-                                                        {gift.name}
-                                                    </h3>
+                                            <CardContent className="relative h-full p-8 flex flex-col justify-end z-10">
+                                                <h3 className="font-serif text-3xl sm:text-4xl leading-tight font-bold text-white mb-6 drop-shadow-lg">
+                                                    {myClaimedGift.name}
+                                                </h3>
 
-                                                    <div className="mt-4">
-                                                        {isClaimedByMe ? (
-                                                            <Button
-                                                                variant="outline"
-                                                                className="w-full bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 hover:text-white transition-all shadow-lg font-serif"
-                                                                onClick={() => unclaimGiftMutation.mutate({ giftId: gift.id })}
-                                                                disabled={unclaimGiftMutation.isPending}
-                                                            >
-                                                                Cancelar Reserva
-                                                            </Button>
-                                                        ) : isClaimed ? (
-                                                            <Button
-                                                                variant="secondary"
-                                                                className="w-full bg-black/40 backdrop-blur-sm text-white/50 border border-white/10 cursor-not-allowed font-serif"
-                                                                disabled
-                                                            >
-                                                                Reservado
-                                                            </Button>
-                                                        ) : (
-                                                            <Button
-                                                                className="w-full bg-primary/90 backdrop-blur-sm hover:bg-primary text-primary-foreground shadow-[0_0_15px_rgba(255,255,255,0.2)] font-serif tracking-wide transition-all"
-                                                                onClick={() => claimGiftMutation.mutate({ giftId: gift.id })}
-                                                                disabled={claimGiftMutation.isPending}
-                                                            >
-                                                                Elegir Regalo
-                                                            </Button>
-                                                        )}
-                                                    </div>
+                                                <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                                                    <Button
+                                                        className="flex-1 bg-white hover:bg-white/90 text-black shadow-lg font-serif"
+                                                        onClick={() => setIsChangingGift(true)}
+                                                    >
+                                                        Cambiar Regalo
+                                                    </Button>
+                                                    <Button
+                                                        variant="outline"
+                                                        className="flex-1 bg-black/20 backdrop-blur-sm border-white/20 text-white hover:bg-black/40 hover:text-white transition-all shadow-lg font-serif"
+                                                        onClick={() => unclaimGiftMutation.mutate({ giftId: myClaimedGift.id })}
+                                                        disabled={unclaimGiftMutation.isPending}
+                                                    >
+                                                        Quitar Regalo
+                                                    </Button>
                                                 </div>
                                             </CardContent>
                                         </Card>
                                     </motion.div>
                                 );
-                            })}
-                        </AnimatePresence>
+                            }
+
+                            // --- VIEW 2: SHOW GRID (NO GIFT CLAIMED OR IS CHANGING) ---
+                            return (
+                                <div>
+                                    {isChangingGift && (
+                                        <div className="bg-primary/10 border border-primary/30 p-4 rounded-lg mb-6 flex justify-between items-center">
+                                            <p className="font-serif text-primary">Estás buscando un nuevo obsequio. Al elegir uno, el regalo anterior se liberará.</p>
+                                            <Button variant="ghost" onClick={() => setIsChangingGift(false)} className="text-primary hover:bg-primary/20">
+                                                Cancelar Cambio
+                                            </Button>
+                                        </div>
+                                    )}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                        <AnimatePresence>
+                                            {gifts.map((gift: any, i: number) => {
+                                                const isClaimed = gift.claimedByUserId !== null;
+                                                const isClaimedByMe = gift.claimedByUserId === user?.id;
+                                                // If we are showing the grid, we don't allow re-claiming the same item we currently have directly.
+                                                if (isClaimedByMe && !isChangingGift) return null; // handled by view 1
+
+                                                const imageUrl = getGiftImage(gift.name);
+
+                                                return (
+                                                    <motion.div
+                                                        key={gift.id}
+                                                        initial={{ opacity: 0, y: 10 }}
+                                                        animate={{ opacity: 1, y: 0 }}
+                                                        transition={{ duration: 0.3, delay: i * 0.05 }}
+                                                        className="h-full"
+                                                    >
+                                                        <Card className={`relative overflow-hidden h-64 sm:h-72 border-0 group transition-all duration-500 rounded-xl shadow-md hover:shadow-xl ${isClaimed && !isClaimedByMe ? 'opacity-70 grayscale-[30%]' : ''}`}>
+                                                            {/* Background Image */}
+                                                            <div
+                                                                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                                                                style={{ backgroundImage: `url(${imageUrl})` }}
+                                                            />
+                                                            {/* Gradient Overlay */}
+                                                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 transition-opacity duration-300 group-hover:from-black/95" />
+
+                                                            {/* Claimant info pill if claimed by someone else */}
+                                                            {isClaimed && !isClaimedByMe && gift.claimerName && (
+                                                                <div className="absolute top-3 right-3 z-20 bg-black/60 backdrop-blur-md rounded-full py-1.5 px-3 flex items-center gap-2 border border-white/10 shadow-lg">
+                                                                    <div className="w-5 h-5 rounded-full bg-primary/80 flex items-center justify-center text-[10px] text-white overflow-hidden">
+                                                                        {gift.claimerAvatar ? (
+                                                                            <img src={gift.claimerAvatar} alt={gift.claimerName} className="w-full h-full object-cover" />
+                                                                        ) : (
+                                                                            gift.claimerName.charAt(0).toUpperCase()
+                                                                        )}
+                                                                    </div>
+                                                                    <span className="text-white/90 text-xs font-medium truncate max-w-[100px]">
+                                                                        {gift.claimerName.split(' ')[0]}
+                                                                    </span>
+                                                                </div>
+                                                            )}
+
+                                                            <CardContent className="relative h-full p-6 flex flex-col justify-end z-10">
+                                                                <div className="transform transition-transform duration-300 translate-y-2 group-hover:translate-y-0">
+                                                                    <h3 className={`font-serif text-2xl leading-tight font-bold text-white mb-4 drop-shadow-md`}>
+                                                                        {gift.name}
+                                                                    </h3>
+
+                                                                    <div className="mt-4">
+                                                                        {isClaimed && !isClaimedByMe ? (
+                                                                            <Button
+                                                                                variant="secondary"
+                                                                                className="w-full bg-black/40 backdrop-blur-sm text-white/50 border border-white/10 cursor-not-allowed font-serif pointer-events-none"
+                                                                                disabled
+                                                                            >
+                                                                                No disponible
+                                                                            </Button>
+                                                                        ) : (
+                                                                            <Button
+                                                                                className="w-full bg-primary/90 backdrop-blur-sm hover:bg-primary text-primary-foreground shadow-[0_0_15px_rgba(255,255,255,0.2)] font-serif tracking-wide transition-all"
+                                                                                onClick={() => claimGiftMutation.mutate({ giftId: gift.id })}
+                                                                                disabled={claimGiftMutation.isPending || isClaimedByMe} // Don't let them click if it's currently theirs and they are changing
+                                                                            >
+                                                                                {isClaimedByMe ? "Seleccionado" : "Elegir Regalo"}
+                                                                            </Button>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </CardContent>
+                                                        </Card>
+                                                    </motion.div>
+                                                );
+                                            })}
+                                        </AnimatePresence>
+                                    </div>
+                                </div>
+                            );
+                        })()}
                     </div>
                 )}
 
