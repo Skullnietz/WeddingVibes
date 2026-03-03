@@ -366,9 +366,22 @@ export default function MyGallery() {
                     </div>
                 )}
 
-                <header className="mb-8 mt-12 flex justify-between items-center border-t border-primary/20 pt-8" ref={uploadSectionRef}>
+                <header className="mb-8 mt-12 flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between items-start sm:items-center border-t border-primary/20 pt-8" ref={uploadSectionRef}>
                     <div>
-                        <h1 className="font-serif text-3xl font-bold text-primary mb-2">Mi Galería</h1>
+                        <h1 className="font-serif text-3xl font-bold text-primary mb-2 flex items-center gap-3">
+                            Mi Galería
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-7 px-2 text-xs rounded-full border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+                                onClick={() => {
+                                    setTourStep(1);
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                }}
+                            >
+                                ¿Cómo funciona?
+                            </Button>
+                        </h1>
                         <p className="text-muted-foreground font-sans">
                             Sube tus fotos de la boda. Una vez aprobadas, aparecerán en la galería oficial.
                         </p>
