@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { Upload, Image as ImageIcon, CheckCircle, Clock, Gift, CookingPot, Utensils, UtensilsCrossed, Coffee, Droplets, BedDouble, Bath, Briefcase, Zap, Fan, Flame, ShoppingBag } from "lucide-react";
+import { Upload, Image as ImageIcon, CheckCircle, Clock, Gift } from "lucide-react";
 import { useAuth } from "../_core/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -186,22 +186,35 @@ export default function MyGallery() {
                                 const isClaimed = gift.claimedByUserId !== null;
                                 const isClaimedByMe = gift.claimedByUserId === user?.id;
 
-                                // Definir icono por defecto y mapeo
-                                let ItemIcon = Gift;
-                                const n = gift.name.toUpperCase();
-                                if (n.includes("BATERIA DE COCINA") || n.includes("SARTENES")) ItemIcon = CookingPot;
-                                else if (n.includes("EDREDON") || n.includes("SABANAS") || n.includes("ALMOHADA") || n.includes("COLCHON")) ItemIcon = BedDouble;
-                                else if (n.includes("FREIDORA") || n.includes("LICUADORA")) ItemIcon = Fan;
-                                else if (n.includes("DISPENSADOR")) ItemIcon = Droplets;
-                                else if (n.includes("VAJILLA")) ItemIcon = Utensils;
-                                else if (n.includes("CUBIERTOS") || n.includes("CUCHILLOS")) ItemIcon = UtensilsCrossed;
-                                else if (n.includes("TOALLAS") || n.includes("BAÑO")) ItemIcon = Bath;
-                                else if (n.includes("CAFETERA")) ItemIcon = Coffee;
-                                else if (n.includes("DESPENSA")) ItemIcon = ShoppingBag;
-                                else if (n.includes("VELAS")) ItemIcon = Flame;
-                                else if (n.includes("ESTUFA") || n.includes("BOILER")) ItemIcon = Zap;
-                                else if (n.includes("MALETAS") || n.includes("LONCHERA")) ItemIcon = Briefcase;
-                                else if (n.includes("KARCHER")) ItemIcon = Droplets;
+                                const getGiftImage = (name: string) => {
+                                    const n = name.toUpperCase();
+                                    if (n.includes("BATERIA")) return "/gifts/bateria_cocina.png";
+                                    if (n.includes("EDREDON")) return "/gifts/edredon_matrimonial.png";
+                                    if (n.includes("SABANAS")) return "/gifts/sabanas_matrimoniales.png";
+                                    if (n.includes("ALMOHADA")) return "/gifts/juego_almohadas.png";
+                                    if (n.includes("FREIDORA")) return "/gifts/freidora_aire.png";
+                                    if (n.includes("DISPENSADOR")) return "/gifts/dispensador_agua.png";
+                                    if (n.includes("VAJILLA")) return "/gifts/vajilla.png";
+                                    if (n.includes("CUBIERTOS")) return "/gifts/juego_cubiertos.png";
+                                    if (n.includes("SARTEN")) return "/gifts/sartenes.png";
+                                    if (n.includes("TOALLA")) return "/gifts/juego_toallas.png";
+                                    if (n.includes("CAFETERA")) return "/gifts/cafetera.png";
+                                    if (n.includes("DESPENSA")) return "/gifts/despensa.png";
+                                    if (n.includes("VELAS")) return "/gifts/velas_aromaticas.png";
+                                    if (n.includes("ESQUINERO")) return "/gifts/esquinero_bano.png";
+                                    if (n.includes("BAÑO")) return "/gifts/juego_bano.png";
+                                    if (n.includes("ESTUFA")) return "/gifts/estufa_electrica.png";
+                                    if (n.includes("BOILER")) return "/gifts/boiler_electrico.png";
+                                    if (n.includes("MALETAS")) return "/gifts/juego_maletas.png";
+                                    if (n.includes("LONCHERA")) return "/gifts/loncheras.png";
+                                    if (n.includes("LICUADORA")) return "/gifts/licuadora_portatil.png";
+                                    if (n.includes("COLCHON")) return "/gifts/colchon_inflable.png";
+                                    if (n.includes("CUCHILLOS")) return "/gifts/juego_cuchillos.png";
+                                    if (n.includes("KARCHER")) return "/gifts/karcher.png";
+                                    return "/gifts/bateria_cocina.png"; // Fallback
+                                }
+
+                                const imageUrl = getGiftImage(gift.name);
 
                                 return (
                                     <motion.div
@@ -209,46 +222,51 @@ export default function MyGallery() {
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.3, delay: i * 0.05 }}
+                                        className="h-full"
                                     >
-                                        <Card className={`h-full border ${isClaimedByMe ? 'border-primary bg-primary/5' : isClaimed ? 'border-muted bg-muted/20 opacity-70' : 'border-primary/20 hover:border-primary/50'} transition-all`}>
-                                            <CardContent className="p-5 flex flex-col justify-between h-full">
-                                                <div>
-                                                    <div className="flex items-center gap-3 mb-3">
-                                                        <div className={`p-2 rounded-full ${isClaimedByMe ? 'bg-primary/20 text-primary' : isClaimed ? 'bg-muted text-muted-foreground' : 'bg-primary/10 text-primary'}`}>
-                                                            <ItemIcon size={24} />
-                                                        </div>
-                                                        <h3 className={`font-serif text-[1.1rem] leading-tight font-bold ${isClaimed && !isClaimedByMe ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
-                                                            {gift.name}
-                                                        </h3>
+                                        <Card className={`relative overflow-hidden h-64 sm:h-72 border-0 group transition-all duration-500 rounded-xl shadow-md hover:shadow-xl ${isClaimed && !isClaimedByMe ? 'opacity-60 grayscale-[50%]' : ''}`}>
+                                            {/* Background Image */}
+                                            <div
+                                                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                                                style={{ backgroundImage: `url(${imageUrl})` }}
+                                            />
+                                            {/* Gradient Overlay */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 transition-opacity duration-300 group-hover:from-black/95" />
+
+                                            <CardContent className="relative h-full p-6 flex flex-col justify-end z-10">
+                                                <div className="transform transition-transform duration-300 translate-y-2 group-hover:translate-y-0">
+                                                    <h3 className={`font-serif text-2xl leading-tight font-bold text-white mb-4 drop-shadow-md ${isClaimed && !isClaimedByMe ? 'line-through text-white/70' : ''}`}>
+                                                        {gift.name}
+                                                    </h3>
+
+                                                    <div className="mt-4">
+                                                        {isClaimedByMe ? (
+                                                            <Button
+                                                                variant="outline"
+                                                                className="w-full bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 hover:text-white transition-all shadow-lg font-serif"
+                                                                onClick={() => unclaimGiftMutation.mutate({ giftId: gift.id })}
+                                                                disabled={unclaimGiftMutation.isPending}
+                                                            >
+                                                                Cancelar Reserva
+                                                            </Button>
+                                                        ) : isClaimed ? (
+                                                            <Button
+                                                                variant="secondary"
+                                                                className="w-full bg-black/40 backdrop-blur-sm text-white/50 border border-white/10 cursor-not-allowed font-serif"
+                                                                disabled
+                                                            >
+                                                                Reservado
+                                                            </Button>
+                                                        ) : (
+                                                            <Button
+                                                                className="w-full bg-primary/90 backdrop-blur-sm hover:bg-primary text-primary-foreground shadow-[0_0_15px_rgba(255,255,255,0.2)] font-serif tracking-wide transition-all"
+                                                                onClick={() => claimGiftMutation.mutate({ giftId: gift.id })}
+                                                                disabled={claimGiftMutation.isPending}
+                                                            >
+                                                                Elegir Regalo
+                                                            </Button>
+                                                        )}
                                                     </div>
-                                                </div>
-                                                <div className="mt-4">
-                                                    {isClaimedByMe ? (
-                                                        <Button
-                                                            variant="outline"
-                                                            className="w-full border-primary/50 text-primary hover:bg-primary/10"
-                                                            onClick={() => unclaimGiftMutation.mutate({ giftId: gift.id })}
-                                                            disabled={unclaimGiftMutation.isPending}
-                                                        >
-                                                            Cancelar Reserva
-                                                        </Button>
-                                                    ) : isClaimed ? (
-                                                        <Button
-                                                            variant="secondary"
-                                                            className="w-full bg-muted text-muted-foreground cursor-not-allowed"
-                                                            disabled
-                                                        >
-                                                            Reservado
-                                                        </Button>
-                                                    ) : (
-                                                        <Button
-                                                            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm"
-                                                            onClick={() => claimGiftMutation.mutate({ giftId: gift.id })}
-                                                            disabled={claimGiftMutation.isPending}
-                                                        >
-                                                            Elegir Regalo
-                                                        </Button>
-                                                    )}
                                                 </div>
                                             </CardContent>
                                         </Card>
