@@ -28,7 +28,7 @@ export default function Navigation() {
 
     const scrollToSection = (sectionId: string) => {
         // If not on the home page, navigate to home and append hash
-        if (location !== "/" && location !== "/#galeria") {
+        if (location !== "/") {
             window.location.href = `/#${sectionId}`;
             return;
         }
@@ -56,7 +56,7 @@ export default function Navigation() {
                     {sections.map((section) => (
                         <button
                             key={section.id}
-                            onClick={() => scrollToSection(section.id)}
+                            onClick={() => section.id === "galeria" ? navigate("/galeria") : scrollToSection(section.id)}
                             className="text-sm font-sans text-foreground hover:text-primary transition-colors"
                         >
                             {section.label}
@@ -106,7 +106,14 @@ export default function Navigation() {
                             {sections.map((section) => (
                                 <button
                                     key={section.id}
-                                    onClick={() => scrollToSection(section.id)}
+                                    onClick={() => {
+                                        if (section.id === "galeria") {
+                                            navigate("/galeria");
+                                        } else {
+                                            scrollToSection(section.id);
+                                        }
+                                        setIsOpen(false);
+                                    }}
                                     className="text-sm font-sans text-foreground hover:text-primary transition-colors text-left"
                                 >
                                     {section.label}
