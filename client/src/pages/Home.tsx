@@ -354,7 +354,7 @@ function DetailsSection() {
             transition={{ duration: 0.8 }}
           >
             <Card className="p-10 border-primary/20 hover:border-primary/50 transition-all duration-300 h-full bg-white/50 backdrop-blur-sm shadow-sm hover:shadow-md">
-              <div className="grid md:grid-cols-2 gap-8 items-center h-full">
+              <div className="grid md:grid-cols-[1fr_1.5fr] gap-8 items-center h-full">
                 <div>
                   <div className="flex items-center gap-4 mb-8">
                     <div className="flex -space-x-3">
@@ -378,18 +378,28 @@ function DetailsSection() {
                     </div>
                   </div>
                 </div>
-                <div className="grid gap-6 bg-primary/5 p-6 md:p-8 rounded-xl border border-primary/10 h-full place-content-center">
-                  <div>
-                    <h4 className="font-sans text-xs font-semibold tracking-widest text-muted-foreground uppercase mb-2 opacity-80">Colores</h4>
-                    <p className="font-medium text-foreground leading-relaxed text-lg">
-                      Claros (blancos, perla, champagne, crema, beige, nude, dorados o cálidos)
-                    </p>
+
+                <div className="grid sm:grid-cols-2 gap-6 bg-primary/5 p-6 md:p-8 rounded-xl border border-primary/10 h-full place-content-center">
+                  <div className="flex flex-col gap-6 justify-center">
+                    <div>
+                      <h4 className="font-sans text-xs font-semibold tracking-widest text-muted-foreground uppercase mb-2 opacity-80">Colores</h4>
+                      <p className="font-medium text-foreground leading-relaxed text-sm md:text-base">
+                        Claros (blancos, perla, champagne, crema, beige, nude, dorados o cálidos)
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-sans text-xs font-semibold tracking-widest text-muted-foreground uppercase mb-2 opacity-80">Consideración</h4>
+                      <p className="font-medium text-foreground leading-relaxed text-sm md:text-base">
+                        Calzado apto para jardín (evitar tacón fino)
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-sans text-xs font-semibold tracking-widest text-muted-foreground uppercase mb-2 opacity-80">Consideración</h4>
-                    <p className="font-medium text-foreground leading-relaxed text-lg">
-                      Calzado apto para jardín (evitar tacón fino)
-                    </p>
+                  <div className="relative rounded-lg overflow-hidden border border-primary/20 shadow-md">
+                    <img
+                      src="/dress_code.png"
+                      alt="Ejemplo de Vestimenta Casual Elegante"
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105 min-h-[150px]"
+                    />
                   </div>
                 </div>
               </div>
@@ -1042,13 +1052,15 @@ function ClosingSection() {
           </p>
 
           {isAuthenticated && (
-            <Button
-              size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-serif"
-            >
-              <Camera className="mr-2" size={20} />
-              Sube tus Fotos
-            </Button>
+            <a href="/mi-galeria" className="inline-block">
+              <Button
+                size="lg"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-serif"
+              >
+                <Camera className="mr-2" size={20} />
+                Sube tus Fotos
+              </Button>
+            </a>
           )}
         </motion.div>
       </div>
