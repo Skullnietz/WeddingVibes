@@ -208,11 +208,11 @@ export default function Gallery() {
 
       {/* Slideshow View */}
       {viewMode === "slideshow" && allPhotos.length > 0 && (
-        <div className="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center overflow-hidden">
+        <div className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center overflow-hidden">
           {/* Close button */}
           <button
             onClick={() => setViewMode("grid")}
-            className="absolute top-6 right-6 z-50 text-white/50 hover:text-white transition-colors bg-white/10 hover:bg-white/20 p-2 rounded-full backdrop-blur-md"
+            className="absolute top-6 right-6 z-50 text-black/50 hover:text-black transition-colors bg-black/5 hover:bg-black/10 p-2 rounded-full backdrop-blur-md"
           >
             <span className="text-xl md:text-2xl">✕</span>
           </button>
@@ -232,9 +232,9 @@ export default function Gallery() {
                 <img
                   src={allPhotos[currentSlideIndex]?.imageUrl}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover blur-3xl scale-125 opacity-80"
+                  className="absolute inset-0 w-full h-full object-cover blur-3xl scale-125 opacity-30"
                 />
-                <div className="absolute inset-0 bg-black/40" />
+                <div className="absolute inset-0 bg-white/60" />
 
                 {/* Main Foreground Image */}
                 <img
@@ -242,7 +242,7 @@ export default function Gallery() {
                   alt={allPhotos[currentSlideIndex]?.title ? allPhotos[currentSlideIndex].title : "Foto de la boda"}
                   className="relative z-10 w-full h-[85vh] md:h-full object-contain p-4 md:p-12 pb-32 md:pb-40 drop-shadow-2xl"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-black/50 z-20 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-white/30 to-transparent z-20 pointer-events-none" />
               </motion.div>
             </AnimatePresence>
           </div>
@@ -256,17 +256,17 @@ export default function Gallery() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="max-w-3xl mx-auto"
             >
-              <p className="text-xl md:text-3xl font-serif text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] mb-2">
+              <p className="text-xl md:text-3xl font-serif text-black drop-shadow-[0_2px_4px_rgba(255,255,255,0.8)] mb-2">
                 {allPhotos[currentSlideIndex]?.title ? allPhotos[currentSlideIndex].title : "Nuestra Boda"}
               </p>
               {/* @ts-ignore - The database description type may vary slightly from the static object */}
               {allPhotos[currentSlideIndex]?.description ? (
-                <p className="text-sm md:text-base text-gray-200 drop-shadow-md">
+                <p className="text-sm md:text-base text-gray-800 drop-shadow-sm">
                   {/* @ts-ignore */}
                   {allPhotos[currentSlideIndex].description}
                 </p>
               ) : null}
-              <p className="text-xs text-white/50 mt-4 tracking-widest font-sans uppercase">
+              <p className="text-xs text-black/50 mt-4 tracking-widest font-sans uppercase">
                 {currentSlideIndex + 1} / {allPhotos.length}
               </p>
             </motion.div>
@@ -276,13 +276,13 @@ export default function Gallery() {
           <div className="absolute top-1/2 -translate-y-1/2 left-4 right-4 z-40 flex items-center justify-between pointer-events-none">
             <button
               onClick={handlePreviousSlide}
-              className="pointer-events-auto text-white/50 hover:text-white transition-all hover:scale-110 bg-black/20 hover:bg-black/40 p-3 rounded-full backdrop-blur-sm"
+              className="pointer-events-auto text-black/50 hover:text-black transition-all hover:scale-110 bg-black/5 hover:bg-black/10 p-3 rounded-full backdrop-blur-sm"
             >
               <ChevronLeft size={32} />
             </button>
             <button
               onClick={handleNextSlide}
-              className="pointer-events-auto text-white/50 hover:text-white transition-all hover:scale-110 bg-black/20 hover:bg-black/40 p-3 rounded-full backdrop-blur-sm"
+              className="pointer-events-auto text-black/50 hover:text-black transition-all hover:scale-110 bg-black/5 hover:bg-black/10 p-3 rounded-full backdrop-blur-sm"
             >
               <ChevronRight size={32} />
             </button>
@@ -292,9 +292,9 @@ export default function Gallery() {
           <div className="absolute top-6 left-6 z-40">
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className="text-white/70 hover:text-white transition-colors flex items-center gap-2 bg-black/30 hover:bg-black/50 backdrop-blur-md px-4 py-2 rounded-full text-sm font-sans"
+              className="text-black/70 hover:text-black transition-colors flex items-center gap-2 bg-black/5 hover:bg-black/10 backdrop-blur-md px-4 py-2 rounded-full text-sm font-sans"
             >
-              {isPlaying ? <Pause size={16} fill="white" /> : <Play size={16} fill="white" />}
+              {isPlaying ? <Pause size={16} fill="black" /> : <Play size={16} fill="black" />}
               {isPlaying ? "Pausar Álbum" : "Reproducir Álbum"}
             </button>
           </div>

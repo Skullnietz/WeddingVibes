@@ -203,20 +203,20 @@ export default function SpotifyPlayer() {
 
     // State 3: Active Player Widget (Bottom Docked)
     return (
-        <div className="fixed bottom-0 left-0 right-0 bg-background/90 backdrop-blur-xl border-t border-border p-3 sm:p-4 z-[60] shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+        <div className="fixed bottom-0 left-0 right-0 bg-neutral-950/95 backdrop-blur-xl border-t border-white/10 p-3 sm:p-4 z-[60] shadow-[0_-10px_40px_rgba(0,0,0,0.4)]">
 
             {/* Advertisement / Info Tab floating at the far bottom right of the screen */}
             <motion.div
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 2, duration: 1, type: "spring", bounce: 0.4 }}
-                className="absolute bottom-full right-4 lg:right-8 mb-4 hidden md:flex items-center gap-4 bg-background/95 backdrop-blur-xl border border-primary/40 p-3 pr-4 rounded-t-2xl rounded-bl-2xl rounded-tr-sm shadow-[0_0_30px_rgba(212,175,55,0.2)]"
+                className="absolute bottom-full right-4 lg:right-8 mb-4 hidden md:flex items-center gap-4 bg-neutral-900/95 backdrop-blur-xl border border-primary/40 p-3 pr-4 rounded-t-2xl rounded-bl-2xl rounded-tr-sm shadow-[0_0_30px_rgba(212,175,55,0.1)] text-white"
             >
                 <div className="flex flex-col items-end text-right">
                     <p className="text-primary font-serif text-lg lg:text-xl font-bold leading-tight flex items-center gap-2">
                         <span className="animate-pulse">📸</span> ¡Sube tus fotos!
                     </p>
-                    <p className="text-muted-foreground font-sans text-xs max-w-[180px] mt-1">
+                    <p className="text-white/70 font-sans text-xs max-w-[180px] mt-1">
                         Escanea este código o entra a la galería para compartir tus recuerdos.
                     </p>
                 </div>
@@ -250,10 +250,10 @@ export default function SpotifyPlayer() {
                     </motion.div>
 
                     <div className="flex flex-col overflow-hidden">
-                        <span className="font-semibold text-sm truncate text-foreground">
+                        <span className="font-semibold text-sm truncate text-white">
                             {displayTrack?.name}
                         </span>
-                        <span className="text-xs text-muted-foreground truncate">
+                        <span className="text-xs text-white/60 truncate">
                             {displayTrack?.artists.map((a: any) => a.name).join(", ")}
                         </span>
                     </div>
@@ -265,22 +265,22 @@ export default function SpotifyPlayer() {
                         <Button
                             variant="ghost" size="icon"
                             onClick={() => player?.previousTrack()}
-                            className="text-muted-foreground hover:text-foreground h-8 w-8"
+                            className="text-white/50 hover:text-white hover:bg-white/10 h-8 w-8"
                         >
                             <SkipBack className="w-4 h-4 fill-current" />
                         </Button>
 
                         <Button
                             onClick={handlePlayClick}
-                            className="w-10 h-10 rounded-full bg-primary text-primary-foreground hover:scale-105 transition-all shadow-md flex items-center justify-center p-0"
+                            className="w-10 h-10 rounded-full bg-primary text-black hover:scale-105 transition-all shadow-md flex items-center justify-center p-0"
                         >
-                            {isPaused ? <Play className="w-5 h-5 fill-current ml-1" /> : <Pause className="w-5 h-5 fill-current" />}
+                            {isPaused ? <Play className="w-5 h-5 fill-black ml-1" /> : <Pause className="w-5 h-5 fill-black" />}
                         </Button>
 
                         <Button
                             variant="ghost" size="icon"
                             onClick={() => player?.nextTrack()}
-                            className="text-muted-foreground hover:text-foreground h-8 w-8"
+                            className="text-white/50 hover:text-white hover:bg-white/10 h-8 w-8"
                         >
                             <SkipForward className="w-4 h-4 fill-current" />
                         </Button>
