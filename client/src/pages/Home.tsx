@@ -426,7 +426,7 @@ function DetailsSection() {
 
               {/* Google Calendar Button */}
               <a
-                href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Boda de " + WEDDING_DATA.bride + " y " + WEDDING_DATA.groom)}&dates=20260411T193000Z/20260412T050000Z&details=${encodeURIComponent("✨ ¡Te esperamos para celebrar nuestra boda! ✨")}&location=${encodeURIComponent(WEDDING_DATA.venue)}`}
+                href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Boda de " + WEDDING_DATA.bride + " y " + WEDDING_DATA.groom)}&dates=20260411T193000Z/20260412T050000Z&details=${encodeURIComponent("✨ ¡Te esperamos para celebrar nuestra boda! ✨\n\n⏰ RECORDATORIO: Te sugerimos agregar una notificación 3 horas antes para prepararte a tiempo.")}&location=${encodeURIComponent(WEDDING_DATA.venue)}`}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full max-w-sm"
