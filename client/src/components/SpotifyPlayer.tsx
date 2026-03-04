@@ -204,7 +204,33 @@ export default function SpotifyPlayer() {
     // State 3: Active Player Widget (Bottom Docked)
     return (
         <div className="fixed bottom-0 left-0 right-0 bg-background/90 backdrop-blur-xl border-t border-border p-3 sm:p-4 z-[60] shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
-            <div className="container max-w-4xl mx-auto flex items-center justify-between gap-4">
+            <div className="container max-w-4xl mx-auto flex items-center justify-between gap-4 relative">
+
+                {/* Advertisement / Info Tab floating above the player */}
+                <motion.div
+                    initial={{ y: 50, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 2, duration: 1, type: "spring", bounce: 0.4 }}
+                    className="absolute bottom-full right-0 mb-4 hidden md:flex items-center gap-4 bg-background/95 backdrop-blur-xl border border-primary/40 p-3 pr-4 rounded-t-2xl rounded-bl-2xl shadow-[0_0_30px_rgba(212,175,55,0.2)]"
+                >
+                    <div className="flex flex-col items-end text-right">
+                        <p className="text-primary font-serif text-lg lg:text-xl font-bold leading-tight flex items-center gap-2">
+                            <span className="animate-pulse">📸</span> ¡Sube tus fotos!
+                        </p>
+                        <p className="text-muted-foreground font-sans text-xs max-w-[180px] mt-1">
+                            Escanea este código o entra a la galería para compartir tus recuerdos.
+                        </p>
+                    </div>
+                    <div className="bg-white p-1 rounded-xl shrink-0 shadow-inner group cursor-pointer hover:scale-105 transition-transform">
+                        {/* We use api.qrserver.com to generate the QR on the fly nicely */}
+                        <img
+                            src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://weddingvibes.com.mx/mi-galeria&margin=0"
+                            alt="QR Galería"
+                            className="w-20 h-20 lg:w-24 lg:h-24 object-contain"
+                            crossOrigin="anonymous"
+                        />
+                    </div>
+                </motion.div>
 
                 {/* Track Info */}
                 <div className="flex items-center gap-3 w-1/3 min-w-[200px]">
