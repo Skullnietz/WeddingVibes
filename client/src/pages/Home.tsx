@@ -408,34 +408,34 @@ function DetailsSection() {
             Agenda del Día
           </h3>
           <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto items-center">
-            {/* Calendar Image */}
+            {/* Calendar Image & Button */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className="relative group rounded-2xl overflow-hidden shadow-xl shadow-primary/10"
+              className="flex flex-col items-center gap-6"
             >
-              <div className="absolute inset-0 bg-primary/10 transform rotate-3 scale-105 transition-transform group-hover:rotate-6"></div>
-              <img
-                src="/calendario.png"
-                alt="Calendario de Boda"
-                className="relative z-10 w-full transition-transform duration-500 group-hover:scale-105"
-              />
-
-              {/* Overlay for Google Calendar Button */}
-              <div className="absolute inset-0 bg-black/50 z-20 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-[2px]">
-                <a
-                  href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Boda de " + WEDDING_DATA.bride + " y " + WEDDING_DATA.groom)}&dates=20260411T193000Z/20260412T050000Z&details=${encodeURIComponent("✨ ¡Te esperamos para celebrar nuestra boda! ✨")}&location=${encodeURIComponent(WEDDING_DATA.venue)}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-100"
-                >
-                  <Button className="bg-white hover:bg-white/90 text-primary hover:text-primary-foreground font-serif shadow-xl flex items-center gap-2 py-6 px-6 rounded-xl scale-95 hover:scale-105 transition-all">
-                    <CalendarPlus size={24} />
-                    <span className="text-lg">Agendar en Google Calendar</span>
-                  </Button>
-                </a>
+              <div className="relative group rounded-2xl overflow-hidden shadow-xl shadow-primary/10 w-full mb-2">
+                <div className="absolute inset-0 bg-primary/10 transform rotate-3 scale-105 transition-transform group-hover:rotate-6"></div>
+                <img
+                  src="/calendario.png"
+                  alt="Calendario de Boda"
+                  className="relative z-10 w-full transition-transform duration-500 group-hover:scale-105"
+                />
               </div>
+
+              {/* Google Calendar Button */}
+              <a
+                href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Boda de " + WEDDING_DATA.bride + " y " + WEDDING_DATA.groom)}&dates=20260411T193000Z/20260412T050000Z&details=${encodeURIComponent("✨ ¡Te esperamos para celebrar nuestra boda! ✨")}&location=${encodeURIComponent(WEDDING_DATA.venue)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full max-w-sm"
+              >
+                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-serif shadow-xl flex items-center justify-center gap-3 py-6 rounded-xl transition-all duration-300 hover:-translate-y-1 animate-pulse">
+                  <CalendarPlus size={22} className="animate-bounce" />
+                  <span className="text-lg">Agendar en Google Calendar</span>
+                </Button>
+              </a>
             </motion.div>
 
             {/* Timeline List */}
