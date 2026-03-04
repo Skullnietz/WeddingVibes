@@ -7,6 +7,7 @@ import { useLocation } from "wouter";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { trpc } from "../lib/trpc";
+import { getLoginUrl } from "@/const";
 
 export default function MyGallery() {
     const { user, isAuthenticated, loading } = useAuth();
@@ -58,8 +59,10 @@ export default function MyGallery() {
 
     // Redirigir si no ha iniciado sesión
     useEffect(() => {
-        if (!loading && !isAuthenticated) navigate("/");
-    }, [loading, isAuthenticated, navigate]);
+        if (!loading && !isAuthenticated) {
+            window.location.href = getLoginUrl();
+        }
+    }, [loading, isAuthenticated]);
 
     // Initialize Tour
     useEffect(() => {
