@@ -232,9 +232,9 @@ export default function Gallery() {
                 <img
                   src={allPhotos[currentSlideIndex]?.imageUrl}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover blur-3xl scale-125 opacity-30"
+                  className="absolute inset-0 w-full h-full object-cover blur-3xl scale-125 opacity-80"
                 />
-                <div className="absolute inset-0 bg-white/60" />
+                <div className="absolute inset-0 bg-white/70" />
 
                 {/* Main Foreground Image */}
                 <img
@@ -248,7 +248,7 @@ export default function Gallery() {
           </div>
 
           {/* Description Overlay */}
-          <div className="absolute bottom-[100px] left-0 right-0 z-40 text-center px-6 pointer-events-none">
+          <div className="absolute bottom-[40px] md:bottom-[60px] left-0 right-0 z-40 text-center px-6 pointer-events-none">
             <motion.div
               key={currentSlideIndex + 'text'}
               initial={{ opacity: 0, y: 20 }}
@@ -266,9 +266,6 @@ export default function Gallery() {
                   {allPhotos[currentSlideIndex].description}
                 </p>
               ) : null}
-              <p className="text-xs text-black/50 mt-4 tracking-widest font-sans uppercase">
-                {currentSlideIndex + 1} / {allPhotos.length}
-              </p>
             </motion.div>
           </div>
 
