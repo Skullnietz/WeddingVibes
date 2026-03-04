@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getLoginUrl } from "@/const";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, MapPin, Clock, Gift, Users, Camera, MessageCircle, ChevronDown, Menu, X, Gem, PartyPopper, CheckCircle } from "lucide-react";
+import { Heart, MapPin, Clock, Gift, Users, Camera, MessageCircle, ChevronDown, Menu, X, Gem, PartyPopper, CheckCircle, CalendarPlus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLocation, useRoute } from "wouter";
 import { trpc } from "../lib/trpc";
@@ -413,14 +413,29 @@ function DetailsSection() {
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className="relative group"
+              className="relative group rounded-2xl overflow-hidden shadow-xl shadow-primary/10"
             >
-              <div className="absolute inset-0 bg-primary/10 rounded-2xl transform rotate-3 scale-105 transition-transform group-hover:rotate-6"></div>
+              <div className="absolute inset-0 bg-primary/10 transform rotate-3 scale-105 transition-transform group-hover:rotate-6"></div>
               <img
                 src="/calendario.png"
                 alt="Calendario de Boda"
-                className="relative z-10 w-full rounded-2xl shadow-xl shadow-primary/10 transition-transform duration-500 group-hover:-translate-y-2"
+                className="relative z-10 w-full transition-transform duration-500 group-hover:scale-105"
               />
+
+              {/* Overlay for Google Calendar Button */}
+              <div className="absolute inset-0 bg-black/50 z-20 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-[2px]">
+                <a
+                  href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Boda de " + WEDDING_DATA.bride + " y " + WEDDING_DATA.groom)}&dates=20260411T193000Z/20260412T050000Z&details=${encodeURIComponent("✨ ¡Te esperamos para celebrar nuestra boda! ✨")}&location=${encodeURIComponent(WEDDING_DATA.venue)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-100"
+                >
+                  <Button className="bg-white hover:bg-white/90 text-primary hover:text-primary-foreground font-serif shadow-xl flex items-center gap-2 py-6 px-6 rounded-xl scale-95 hover:scale-105 transition-all">
+                    <CalendarPlus size={24} />
+                    <span className="text-lg">Agendar en Google Calendar</span>
+                  </Button>
+                </a>
+              </div>
             </motion.div>
 
             {/* Timeline List */}
