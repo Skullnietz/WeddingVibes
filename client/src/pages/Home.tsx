@@ -179,7 +179,7 @@ function HeroSection() {
               </motion.div>
 
               <p className="text-white/90 text-xs md:text-sm font-sans font-light tracking-[0.2em] uppercase mb-2 drop-shadow-md">
-                ¡Qué emoción contar con ustedes!
+                Nos encantaría celebrar con ustedes
               </p>
 
               <h2 className="font-serif text-3xl md:text-5xl text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] leading-tight mb-2">
