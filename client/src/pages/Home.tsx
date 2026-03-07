@@ -166,7 +166,7 @@ function HeroSection() {
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
-            className="absolute top-[70px] md:top-[90px] left-0 right-0 z-[100] pointer-events-none"
+            className="absolute top-[90px] md:top-[120px] left-0 right-0 z-[100] pointer-events-none"
           >
             <div className="bg-black/70 backdrop-blur-md w-full text-center border-b border-primary/40 shadow-[0_10px_40px_rgba(0,0,0,0.5)] pt-6 pb-6">
               <motion.div
