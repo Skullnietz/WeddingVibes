@@ -169,7 +169,7 @@ function HeroSection() {
             transition={{ duration: 0.8, ease: "easeInOut" }}
             className="w-full relative z-[100] text-center pointer-events-none flex-shrink-0"
           >
-            <div className="bg-black/70 backdrop-blur-md w-full border-b border-primary/40 shadow-[0_10px_40px_rgba(0,0,0,0.5)] py-6">
+            <div className="bg-black/70 backdrop-blur-md w-full border-b border-primary/40 shadow-[0_10px_40px_rgba(0,0,0,0.5)] py-6 mb-16 md:mb-32">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
