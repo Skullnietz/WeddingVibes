@@ -125,10 +125,16 @@ function HeroSection() {
   // Fallback to extract from location just in case the Route component didn't pass it perfectly
   const explicitSlug = params?.slug || location.split("/invitacion/")[1]?.split("?")[0] || null;
 
-  const { data: invitation } = trpc.invitations.getBySlug.useQuery(
+  const { data: invitation, isLoading, error } = trpc.invitations.getBySlug.useQuery(
     explicitSlug || "",
     { enabled: !!explicitSlug }
   );
+
+  useEffect(() => {
+    if (explicitSlug) {
+      console.log("Extracted Slug:", explicitSlug, "Invitation Data:", invitation, "Error:", error);
+    }
+  }, [explicitSlug, invitation, error]);
 
   return (
     <section
@@ -157,9 +163,9 @@ function HeroSection() {
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
-            className="absolute top-[60px] left-0 right-0 z-40 pointer-events-none"
+            className="absolute top-[80px] md:top-[80px] left-0 right-0 z-[100] pointer-events-none"
           >
-            <div className="bg-black/50 backdrop-blur-md w-full text-center border-b border-primary/30 shadow-2xl pt-6 pb-6">
+            <div className="bg-black/70 backdrop-blur-md w-full text-center border-b border-primary/40 shadow-[0_10px_40px_rgba(0,0,0,0.5)] pt-6 pb-6">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
