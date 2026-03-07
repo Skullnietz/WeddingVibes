@@ -159,40 +159,41 @@ function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-black/10 to-black/60" />
       </div>
 
-      {/* Invitación Personalizada Separada (Top Banner Flotante o Bloque Superior) */}
-      <AnimatePresence>
-        {invitation?.guestName && (
-          <motion.div
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
-            className="absolute top-[90px] md:top-[120px] left-0 right-0 z-[100] pointer-events-none"
-          >
-            <div className="bg-black/70 backdrop-blur-md w-full text-center border-b border-primary/40 shadow-[0_10px_40px_rgba(0,0,0,0.5)] pt-6 pb-6">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 1.2, type: "spring" }}
-                className="mb-3"
-              >
-                <PartyPopper size={24} className="text-primary mx-auto drop-shadow-md" />
-              </motion.div>
+      <div className="container relative z-10 flex flex-col items-center justify-center mt-32 md:mt-48 mb-16 px-4">
 
-              <p className="text-white/90 text-xs md:text-sm font-sans font-light tracking-[0.2em] uppercase mb-2 drop-shadow-md">
-                Nos encantaría celebrar con ustedes
-              </p>
+        {/* Invitación Personalizada en el flujo normal (Empuja el contenido hacia abajo) */}
+        <AnimatePresence>
+          {invitation?.guestName && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+              className="w-full max-w-2xl text-center mb-12 sm:mb-16 pointer-events-none"
+            >
+              <div className="bg-black/80 backdrop-blur-md w-full rounded-2xl border border-primary/40 shadow-[0_10px_40px_rgba(0,0,0,0.5)] p-6 md:p-8">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.8, type: "spring" }}
+                  className="mb-4"
+                >
+                  <PartyPopper size={24} className="text-primary mx-auto drop-shadow-md" />
+                </motion.div>
 
-              <h2 className="font-serif text-3xl md:text-5xl text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] leading-tight mb-2">
-                {invitation.guestName}
-              </h2>
+                <p className="text-white/90 text-[10px] md:text-sm font-sans font-light tracking-[0.2em] uppercase mb-3 drop-shadow-md">
+                  Nos encantaría celebrar con ustedes
+                </p>
 
-              <div className="w-12 h-px bg-primary/40 mx-auto" />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                <h2 className="font-serif text-2xl md:text-4xl text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] leading-tight mb-4 whitespace-normal break-words max-w-[90%] mx-auto">
+                  {invitation.guestName}
+                </h2>
 
-      <div className="container relative z-10 flex flex-col items-center justify-center mt-80 md:mt-[22rem] mb-16">
+                <div className="w-16 h-px bg-primary/40 mx-auto" />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Glassmorphism container for maximum contrast */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
