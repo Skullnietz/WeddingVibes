@@ -163,9 +163,10 @@ function HeroSection() {
       <AnimatePresence>
         {invitation?.guestName && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+            initial={{ opacity: 0, height: 0, overflow: 'hidden' }}
+            animate={{ opacity: 1, height: 'auto', overflow: 'visible' }}
+            exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
             className="w-full relative z-[100] text-center pointer-events-none flex-shrink-0"
           >
             <div className="bg-black/70 backdrop-blur-md w-full border-b border-primary/40 shadow-[0_10px_40px_rgba(0,0,0,0.5)] py-6">
@@ -192,7 +193,7 @@ function HeroSection() {
         )}
       </AnimatePresence>
 
-      <div className={`container relative z-10 flex-1 flex flex-col items-center justify-center pb-12 md:pb-16 ${invitation?.guestName ? 'pt-32 md:pt-48' : 'pt-12 md:pt-16'}`}>
+      <div className="container relative z-10 flex-1 flex flex-col items-center justify-center py-12 md:py-16">
         {/* Glassmorphism container for maximum contrast */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
