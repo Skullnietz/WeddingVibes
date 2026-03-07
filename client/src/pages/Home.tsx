@@ -192,7 +192,7 @@ function HeroSection() {
         )}
       </AnimatePresence>
 
-      <div className="container relative z-10 flex-1 flex flex-col items-center justify-center py-12 md:py-16">
+      <div className={`container relative z-10 flex-1 flex flex-col items-center justify-center pb-12 md:pb-16 ${invitation?.guestName ? 'pt-32 md:pt-48' : 'pt-12 md:pt-16'}`}>
         {/* Glassmorphism container for maximum contrast */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
