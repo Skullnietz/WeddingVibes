@@ -463,9 +463,14 @@ export default function MyGallery() {
                         </p>
                     </div>
                     {user?.role === 'admin' && (
-                        <Button onClick={() => navigate("/admin/galeria")} variant="outline" className="font-serif">
-                            Panel Admin
-                        </Button>
+                        <div className="flex gap-2">
+                            <Button onClick={() => navigate("/admin/galeria")} variant="outline" className="font-serif">
+                                Panel Admin
+                            </Button>
+                            <Button onClick={() => navigate("/admin/asistencia")} variant="outline" className="font-serif border-primary/40 text-primary">
+                                Panel Asistencia
+                            </Button>
+                        </div>
                     )}
                 </header>
 

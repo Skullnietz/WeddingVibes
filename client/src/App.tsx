@@ -9,6 +9,7 @@ import Gallery from "./pages/Gallery";
 import Navigation from "./components/Navigation";
 import MyGallery from "./pages/MyGallery";
 import AdminGallery from "./pages/AdminGallery";
+import AdminAsistencia from "./pages/AdminAsistencia";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/galeria" component={Gallery} />
       <Route path="/mi-galeria" component={MyGallery} />
       <Route path="/admin/galeria" component={AdminGallery} />
+      <Route path="/admin/asistencia" component={AdminAsistencia} />
       <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

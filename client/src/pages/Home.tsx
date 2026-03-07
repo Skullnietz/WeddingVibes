@@ -742,12 +742,14 @@ function RSVPSection() {
         guestName: formData.guestName,
         isAttending: formData.isAttending,
         numberOfCompanions: formData.numberOfCompanions,
+        invitationId: invitation?.id,
       });
     } else {
       createRSVPMutation.mutate({
         guestName: formData.guestName,
         isAttending: formData.isAttending,
         numberOfCompanions: formData.numberOfCompanions,
+        invitationId: invitation?.id,
       });
     }
   };

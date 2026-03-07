@@ -36,6 +36,7 @@ export const rsvps = mysqlTable("rsvps", {
   needsTransport: boolean("needsTransport").default(false),
   transportFrom: varchar("transportFrom", { length: 255 }),
   specialRequests: text("specialRequests"),
+  invitationId: int("invitationId"), // Ties this RSVP back to an explicitly generated URL
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -60,8 +61,12 @@ export type InsertCompanion = typeof companions.$inferInsert;
 /**
  * Relations
  */
-export const rsvpsRelations = relations(rsvps, ({ many }) => ({
+export const rsvpsRelations = relations(rsvps, ({ many, one }) => ({
   companions: many(companions),
+  invitation: one(invitations, {
+    fields: [rsvps.invitationId],
+    references: [invitations.id],
+  }),
 }));
 
 export const companionsRelations = relations(companions, ({ one }) => ({
@@ -116,6 +121,10 @@ export const invitations = mysqlTable("invitations", {
 
 export type Invitation = typeof invitations.$inferSelect;
 export type InsertInvitation = typeof invitations.$inferInsert;
+
+export const invitationsRelations = relations(invitations, ({ many }) => ({
+  rsvps: many(rsvps),
+}));
 
 /**
  * Spotify Song Requests

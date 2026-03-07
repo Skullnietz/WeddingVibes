@@ -5,7 +5,7 @@ import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { sql } from "drizzle-orm";
 import { users } from "../drizzle/schema";
-import { createRSVP, getRSVPByUserId, updateRSVP, getWeddingPhotos, getPreWeddingPhotos, getInvitationBySlug, getSongRequests, createSongRequest, getGifts, claimGift, unclaimGift, getDb } from "./db";
+import { createRSVP, getRSVPByUserId, updateRSVP, getAllRsvps, getWeddingPhotos, getPreWeddingPhotos, getInvitationBySlug, getSongRequests, createSongRequest, getGifts, claimGift, unclaimGift, getDb } from "./db";
 
 export const appRouter = router({
   system: systemRouter,
@@ -32,6 +32,7 @@ export const appRouter = router({
         needsTransport: z.boolean().default(false),
         transportFrom: z.string().optional(),
         specialRequests: z.string().optional(),
+        invitationId: z.number().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
         return await createRSVP({
@@ -43,6 +44,15 @@ export const appRouter = router({
     getByUser: protectedProcedure
       .query(async ({ ctx }) => {
         return await getRSVPByUserId(ctx.user.id);
+      }),
+
+    getAll: protectedProcedure
+      .query(async ({ ctx }) => {
+        // Enforce basic admin/owner level protection, or at least auth'd user access
+        if (ctx.user.role !== 'admin') {
+          throw new Error("Acceso denegado: solo administradores.");
+        }
+        return await getAllRsvps();
       }),
 
     update: protectedProcedure
@@ -57,6 +67,7 @@ export const appRouter = router({
         needsTransport: z.boolean().optional(),
         transportFrom: z.string().optional(),
         specialRequests: z.string().optional(),
+        invitationId: z.number().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
         const { id, ...data } = input;

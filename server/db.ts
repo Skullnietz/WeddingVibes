@@ -122,6 +122,31 @@ export async function getRSVPByUserId(userId: number) {
   return result.length > 0 ? result[0] : undefined;
 }
 
+export async function getAllRsvps() {
+  const db = await getDb();
+  if (!db) return [];
+  // Use a left join to include the original invitation slug/guestName if available
+  const result = await db
+    .select({
+      id: rsvps.id,
+      userId: rsvps.userId,
+      guestName: rsvps.guestName,
+      isAttending: rsvps.isAttending,
+      numberOfCompanions: rsvps.numberOfCompanions,
+      specialRequests: rsvps.specialRequests,
+      dietaryRestrictions: rsvps.dietaryRestrictions,
+      createdAt: rsvps.createdAt,
+      invitationId: rsvps.invitationId,
+      originalInvitationName: invitations.guestName,
+      originalInvitationSlug: invitations.slug,
+    })
+    .from(rsvps)
+    .leftJoin(invitations, eq(rsvps.invitationId, invitations.id))
+    .orderBy(desc(rsvps.createdAt));
+
+  return result;
+}
+
 export async function updateRSVP(rsvpId: number, data: Partial<InsertRSVP>) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
