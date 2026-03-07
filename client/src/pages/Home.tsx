@@ -969,7 +969,23 @@ function FAQSection() {
     },
     {
       question: "¿Hay estacionamiento?",
-      answer: "Sí, hay estacionamiento gratuito disponible en el venue.",
+      answer: (
+        <div className="space-y-2">
+          <p>Sí, aunque el venue no cuenta con estacionamiento privado, proporcionaremos opciones cercanas:</p>
+          <ul className="list-disc list-inside space-y-1">
+            <li>
+              <a href="https://maps.app.goo.gl/Wa1eTe4NvoB6ZQ8HA" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                Estacionamiento Público (Ejemplo 1)
+              </a>
+            </li>
+            <li>
+              <a href="https://maps.app.goo.gl/Wa1eTe4NvoB6ZQ8HA" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                Estacionamiento Cercano (Ejemplo 2)
+              </a>
+            </li>
+          </ul>
+        </div>
+      ),
     },
   ];
 
@@ -1016,7 +1032,7 @@ function FAQSection() {
                   transition={{ duration: 0.3 }}
                   className="p-4 bg-secondary/30 border-l-2 border-primary"
                 >
-                  <p className="text-luxury text-foreground">{faq.answer}</p>
+                  <div className="text-luxury text-foreground">{faq.answer}</div>
                 </motion.div>
               )}
             </motion.div>
