@@ -212,7 +212,7 @@
 }
 
 .heading-luxury {
-  @apply font-serif text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
+  @apply font-serif text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight;
 }
 
 .subheading-luxury {
