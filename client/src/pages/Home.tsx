@@ -965,27 +965,11 @@ function FAQSection() {
   const faqs = [
     {
       question: "¿Pueden asistir niños?",
-      answer: "Sí, los niños son bienvenidos. Por favor indícalo en el RSVP para preparar actividades especiales.",
-    },
-    {
-      question: "¿Qué pasa si llueve?",
-      answer: "El evento tiene cobertura completa. La ceremonia y recepción se realizarán sin inconvenientes.",
-    },
-    {
-      question: "¿Qué colores debo evitar?",
-      answer: "Por favor evita blanco, negro y tonos muy oscuros. Los colores de la boda son púrpura y dorado.",
-    },
-    {
-      question: "¿Habrá transporte de regreso?",
-      answer: "Sí, proporcionaremos transporte de regreso hasta las 2:00 AM.",
+      answer: "Sí, los niños son bienvenidos.",
     },
     {
       question: "¿Hay estacionamiento?",
       answer: "Sí, hay estacionamiento gratuito disponible en el venue.",
-    },
-    {
-      question: "¿Política de fotos durante la ceremonia?",
-      answer: "Por favor no tomes fotos durante la ceremonia. Podrás hacerlo durante la recepción.",
     },
   ];
 
