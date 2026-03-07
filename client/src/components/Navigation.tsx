@@ -78,7 +78,7 @@ export default function Navigation() {
     };
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-border">
+        <nav className="fixed top-0 left-0 right-0 z-[200] bg-white/95 backdrop-blur-md border-b border-border">
             <div className="container flex justify-between items-center py-4">
                 <motion.div
                     className="font-serif text-xl font-bold text-primary cursor-pointer hover:opacity-80 transition-opacity"
