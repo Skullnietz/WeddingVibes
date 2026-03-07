@@ -158,7 +158,7 @@ function HeroSection() {
 
       {/* Invitación Personalizada Separada (Top Banner Flotante o Bloque Superior) */}
       <AnimatePresence>
-        {invitation?.guestName && (
+        {explicitSlug && (
           <motion.div
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -176,11 +176,15 @@ function HeroSection() {
               </motion.div>
 
               <p className="text-white/90 text-xs md:text-sm font-sans font-light tracking-[0.2em] uppercase mb-2 drop-shadow-md">
-                ¡Qué emoción contar con ustedes!
+                {isLoading
+                  ? "Buscando invitación..."
+                  : (invitation?.guestName ? "¡Qué emoción contar con ustedes!" : "Hubo un problema con tu invitación")}
               </p>
 
               <h2 className="font-serif text-3xl md:text-5xl text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] leading-tight mb-2">
-                {invitation.guestName}
+                {isLoading
+                  ? "Cargando..."
+                  : (invitation?.guestName || "Invitación no encontrada")}
               </h2>
 
               <div className="w-12 h-px bg-primary/40 mx-auto" />
