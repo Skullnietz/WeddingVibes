@@ -150,6 +150,9 @@ function HeroSection() {
           className="w-full h-full object-cover object-[center_top] sm:object-center opacity-90 origin-center"
           animate={{ scale: [1, 1.1] }}
           transition={{ duration: 25, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
+          fetchPriority="high"
+          loading="eager"
+          decoding="sync"
         />
         {/* Layer 2: Gentle Dark Overlay to guarantee text readability anywhere */}
         <div className="absolute inset-0 bg-black/30" />
