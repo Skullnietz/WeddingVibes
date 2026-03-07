@@ -166,7 +166,7 @@ function HeroSection() {
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
-            className="absolute top-[60px] md:top-[60px] left-0 right-0 z-[100] pointer-events-none"
+            className="absolute top-[60px] md:top-[80px] left-0 right-0 z-[100] pointer-events-none"
           >
             <div className="bg-black/70 backdrop-blur-md w-full text-center border-b border-primary/40 shadow-[0_10px_40px_rgba(0,0,0,0.5)] pt-6 pb-6">
               <motion.div
@@ -192,7 +192,7 @@ function HeroSection() {
         )}
       </AnimatePresence>
 
-      <div className="container relative z-10 flex flex-col items-center justify-center mt-80 md:mt-56 mb-16">
+      <div className="container relative z-10 flex flex-col items-center justify-center mt-80 md:mt-[22rem] mb-16">
         {/* Glassmorphism container for maximum contrast */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
