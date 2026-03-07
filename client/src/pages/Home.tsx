@@ -119,12 +119,15 @@ const CountdownBox = ({ value, label }: { value: number; label: string }) => (
 // Sección Hero
 function HeroSection() {
   const { isAuthenticated } = useAuth();
-  const [, navigate] = useLocation();
+  const [location, navigate] = useLocation();
   const [match, params] = useRoute("/invitacion/:slug");
 
+  // Fallback to extract from location just in case the Route component didn't pass it perfectly
+  const explicitSlug = params?.slug || location.split("/invitacion/")[1]?.split("?")[0] || null;
+
   const { data: invitation } = trpc.invitations.getBySlug.useQuery(
-    params?.slug || "",
-    { enabled: !!match && !!params?.slug }
+    explicitSlug || "",
+    { enabled: !!explicitSlug }
   );
 
   return (
