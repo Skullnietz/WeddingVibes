@@ -46,7 +46,7 @@ const WEDDING_DATA = {
   bride: "Miriam",
   date: new Date("2026-04-11T14:30:00"),
   hashtag: "#MiriamGonzaloCelebracion2026",
-  venue: "Miguel Hidalgo y Costilla 25, Col. 10 de Abril, Naucalpan de Juárez, Edo. Méx. 53320",
+  venue: "4 La Capilla, Los Pastores, Naucalpan de Juárez, Méx.",
   ceremonyTime: "14:30",
   receptionTime: "13:30",
   colors: {
@@ -347,7 +347,7 @@ function DetailsSection() {
                 </div>
                 <div className="h-64 md:h-full min-h-[300px] w-full rounded-xl overflow-hidden shadow-inner border border-primary/10">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3761.223048977133!2d-99.22136565972346!3d19.489037238950626!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d202ee168b41a7%3A0x29674b0f8eee15d7!2sMiguel%20Hidalgo%20y%20Costilla%2025%2C%2010%20de%20Abril%2C%2053320%20Naucalpan%20de%20Ju%C3%A1rez%2C%20M%C3%A9x.!5e0!3m2!1ses-419!2smx!4v1773707700902!5m2!1ses-419!2smx"
+                    src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d279.55503755356517!2d-99.2205259534516!3d19.488769757923713!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTnCsDI5JzE5LjgiTiA5OcKwMTMnMTMuNyJX!5e0!3m2!1ses!2smx!4v1773708086956!5m2!1ses!2smx"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
