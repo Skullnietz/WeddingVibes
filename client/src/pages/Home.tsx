@@ -519,7 +519,7 @@ function DetailsSection() {
 function GallerySection() {
   const { isAuthenticated } = useAuth();
   const photos = [
-    { id: 1, title: "Nuestra primer salida a bailar 💃🕺", src: "/gallery/Nuestra primer salida a bailar.jpeg" },
+    { id: 1, title: "Nuestra primera salida a bailar 💃🕺", src: "/gallery/Nuestra primer salida a bailar.jpeg" },
     { id: 2, title: "Esperando el año nuevo 🎆🥂", src: "/gallery/Esperando el año nuevo.jpeg" },
     { id: 3, title: "En la boda de Tavito 💒💍", src: "/gallery/En la boda de Tavito.jpeg" },
     { id: 4, title: "De paseo en la marquesa 🌲🏞️", src: "/gallery/De paseo en la marquesa.jpeg" },
@@ -886,7 +886,7 @@ function RSVPSection() {
                     variant="outline"
                     className="w-full text-muted-foreground hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors"
                   >
-                    {/* Este botón cambiará o cancelará la asistencia si el usuario interactua, pero de fondo ya está confirmado */}
+                    {/* Este botón cambiará o cancelará la asistencia si el usuario interactúa, pero de fondo ya está confirmado */}
                     Actualizar o Cancelar Asistencia
                   </Button>
                 </div>
@@ -936,7 +936,7 @@ function GiftsSection() {
           <h2 className="subheading-luxury text-primary mb-4">Regalos</h2>
           <div className="divider-luxury mx-auto w-24 mb-8" />
           <p className="text-luxury text-muted-foreground max-w-2xl mx-auto">
-            Tu presencia es el mejor regalo, pero si deseas contribuir, aquí hay algunas opciones
+            Tu presencia es el mejor regalo, pero si deseas contribuir, aquí hay algunas opciones.
           </p>
         </motion.div>
 

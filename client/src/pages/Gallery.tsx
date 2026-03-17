@@ -60,7 +60,7 @@ export default function Gallery() {
 
   // Static pre-wedding photos
   const PRE_WEDDING_PHOTOS = [
-    { id: "pre-1", category: "pre-boda", title: "Nuestra primer salida a bailar", imageUrl: "/gallery/Nuestra primer salida a bailar.jpeg" },
+    { id: "pre-1", category: "pre-boda", title: "Nuestra primera salida a bailar", imageUrl: "/gallery/Nuestra primer salida a bailar.jpeg" },
     { id: "pre-2", category: "pre-boda", title: "Esperando el año nuevo", imageUrl: "/gallery/Esperando el año nuevo.jpeg" },
     { id: "pre-3", category: "pre-boda", title: "En la boda de Tavito", imageUrl: "/gallery/En la boda de Tavito.jpeg" },
     { id: "pre-4", category: "pre-boda", title: "De paseo en la marquesa", imageUrl: "/gallery/De paseo en la marquesa.jpeg" },
