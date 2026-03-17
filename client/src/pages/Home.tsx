@@ -40,13 +40,13 @@ const DressIcon = ({ className = "", size = 24 }: { className?: string; size?: n
   </svg>
 );
 
-// Datos de la boda (placeholder - personalizar según necesidad)
+// Datos de la celebración (personalizar según necesidad)
 const WEDDING_DATA = {
   groom: "Gonzalo",
   bride: "Miriam",
   date: new Date("2026-04-11T14:30:00"),
-  hashtag: "#MiriamGonzaloBoda2026",
-  venue: "Pino Suárez num. 312 entre Instituto Literario y Morelos. Col. 5 de mayo. Toluca",
+  hashtag: "#MiriamGonzaloCelebracion2026",
+  venue: "Miguel Hidalgo y Costilla 25, Col. 10 de Abril, Naucalpan de Juárez, Edo. Méx. 53320",
   ceremonyTime: "14:30",
   receptionTime: "13:30",
   colors: {
@@ -180,7 +180,7 @@ function HeroSection() {
               </motion.div>
 
               <p className="text-white/90 text-xs md:text-sm font-sans font-light tracking-[0.2em] uppercase mb-2 drop-shadow-md">
-                Nos encantaría celebrar con ustedes
+                Te invitamos a la celebración de nuestros votos de una manera única y significativa
               </p>
 
               <h2 className="font-serif text-3xl md:text-5xl text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)] leading-tight mb-2">
@@ -337,7 +337,7 @@ function DetailsSection() {
                       <Button
                         variant="outline"
                         className="w-full sm:w-auto font-sans border-primary/20 text-primary hover:bg-primary/5 gap-2"
-                        onClick={() => window.open("https://maps.app.goo.gl/Wa1eTe4NvoB6ZQ8HA", "_blank")}
+                        onClick={() => window.open("https://maps.app.goo.gl/NAasZfktPXk9bHEj9", "_blank")}
                       >
                         <MapPin size={16} />
                         Abrir en Google Maps
@@ -347,7 +347,7 @@ function DetailsSection() {
                 </div>
                 <div className="h-64 md:h-full min-h-[300px] w-full rounded-xl overflow-hidden shadow-inner border border-primary/10">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d235.36834488450313!2d-99.65005240825978!3d19.286996265850824!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cd89b94302f485%3A0x462b6270781b3411!2sLiceo%20preuniversitario%20Toluca!5e0!3m2!1ses-419!2smx!4v1772076287177!5m2!1ses-419!2smx"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3761.223048977133!2d-99.22136565972346!3d19.489037238950626!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d202ee168b41a7%3A0x29674b0f8eee15d7!2sMiguel%20Hidalgo%20y%20Costilla%2025%2C%2010%20de%20Abril%2C%2053320%20Naucalpan%20de%20Ju%C3%A1rez%2C%20M%C3%A9x.!5e0!3m2!1ses-419!2smx!4v1773707700902!5m2!1ses-419!2smx"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -442,14 +442,14 @@ function DetailsSection() {
                 <div className="absolute inset-0 bg-primary/10 transform rotate-3 scale-105 transition-transform group-hover:rotate-6"></div>
                 <img
                   src="/calendario.png"
-                  alt="Calendario de Boda"
+                  alt="Calendario de la Celebración"
                   className="relative z-10 w-full transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
 
               {/* Google Calendar Button */}
               <a
-                href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Boda de " + WEDDING_DATA.bride + " y " + WEDDING_DATA.groom)}&dates=20260411T193000Z/20260412T050000Z&details=${encodeURIComponent("✨ ¡Te esperamos para celebrar nuestra boda! ✨\n\n⏰ RECORDATORIO: Te sugerimos agregar una notificación 3 horas antes para prepararte a tiempo.")}&location=${encodeURIComponent(WEDDING_DATA.venue)}`}
+                href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Celebración de " + WEDDING_DATA.bride + " y " + WEDDING_DATA.groom)}&dates=20260411T193000Z/20260412T050000Z&details=${encodeURIComponent("✨ ¡Te esperamos para celebrar nuestros votos! ✨\n\n⏰ RECORDATORIO: Te sugerimos agregar una notificación 3 horas antes para prepararte a tiempo.")}&location=${encodeURIComponent(WEDDING_DATA.venue)}`}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full max-w-sm"
@@ -465,7 +465,7 @@ function DetailsSection() {
             <div className="space-y-6">
               {[
                 { time: "13:30", event: "RECEPCIÓN" },
-                { time: "14:00", event: "BODA CIVIL" },
+                { time: "14:00", event: "CEREMONIA CIVIL" },
                 { time: "14:30", event: "CEREMONIA" },
                 { time: "15:00", event: "BRINDIS" },
                 { time: "16:30", event: "COMIDA" },
@@ -498,7 +498,7 @@ function DetailsSection() {
   );
 }
 
-// Sección de Galería Pre-boda
+// Sección de Galería Pre-celebración
 function GallerySection() {
   const { isAuthenticated } = useAuth();
   const photos = [
@@ -530,7 +530,7 @@ function GallerySection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="subheading-luxury text-primary mb-4">Galería Pre-boda</h2>
+          <h2 className="subheading-luxury text-primary mb-4">Nuestra Historia</h2>
           <div className="divider-luxury mx-auto w-24 mb-8" />
         </motion.div>
 
@@ -592,7 +592,7 @@ function GallerySection() {
                   </div>
                   <h3 className="font-serif text-xl font-bold text-foreground mb-2">Galería Oficial</h3>
                   <p className="text-sm text-muted-foreground mb-6 font-sans">
-                    Ya tienes acceso. Descubre la mesa de regalos interactiva y comparte tus fotos de la boda.
+                    Ya tienes acceso. Descubre la mesa de regalos interactiva y comparte tus fotos de la celebración.
                   </p>
                   <Button
                     onClick={() => {
@@ -974,12 +974,12 @@ function FAQSection() {
           <p>Sí, aunque el venue no cuenta con estacionamiento privado, proporcionaremos opciones cercanas:</p>
           <ul className="list-disc list-inside space-y-1">
             <li>
-              <a href="https://maps.app.goo.gl/Wa1eTe4NvoB6ZQ8HA" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+              <a href="https://maps.app.goo.gl/NAasZfktPXk9bHEj9" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                 Estacionamiento Público (Ejemplo 1)
               </a>
             </li>
             <li>
-              <a href="https://maps.app.goo.gl/Wa1eTe4NvoB6ZQ8HA" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+              <a href="https://maps.app.goo.gl/NAasZfktPXk9bHEj9" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                 Estacionamiento Cercano (Ejemplo 2)
               </a>
             </li>

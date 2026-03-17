@@ -51,7 +51,7 @@ export default function Gallery() {
 
   // categories
   const categories = [
-    { id: "pre-boda", label: "Pre-Boda" },
+    { id: "pre-boda", label: "Nuestra Historia" },
     { id: "ceremony", label: "Ceremonia" },
     { id: "reception", label: "Recepción" },
     { id: "dance", label: "Baile" },
@@ -109,7 +109,7 @@ export default function Gallery() {
           </button>
 
           <h1 className="font-serif text-lg sm:text-2xl font-bold text-primary absolute left-1/2 -translate-x-1/2 hidden md:block">
-            Galería de la Boda
+            Galería de la Celebración
           </h1>
 
           <div className="flex gap-1 sm:gap-2 ml-auto">
@@ -175,7 +175,7 @@ export default function Gallery() {
               >
                 <img
                   src={photo.imageUrl}
-                  alt={photo.title ? photo.title : "Foto de la boda"}
+                  alt={photo.title ? photo.title : "Foto de la celebración"}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -239,7 +239,7 @@ export default function Gallery() {
                 {/* Main Foreground Image */}
                 <img
                   src={allPhotos[currentSlideIndex]?.imageUrl}
-                  alt={allPhotos[currentSlideIndex]?.title ? allPhotos[currentSlideIndex].title : "Foto de la boda"}
+                  alt={allPhotos[currentSlideIndex]?.title ? allPhotos[currentSlideIndex].title : "Foto de la celebración"}
                   className="relative z-10 w-full h-[85vh] md:h-full object-contain p-4 md:p-12 pb-32 md:pb-40 drop-shadow-2xl"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-black/50 z-20 pointer-events-none" />
@@ -257,7 +257,7 @@ export default function Gallery() {
               className="max-w-3xl mx-auto"
             >
               <p className="text-xl md:text-3xl font-serif text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] mb-2">
-                {allPhotos[currentSlideIndex]?.title ? allPhotos[currentSlideIndex].title : "Nuestra Boda"}
+                {allPhotos[currentSlideIndex]?.title ? allPhotos[currentSlideIndex].title : "Nuestra Celebración"}
               </p>
               {/* @ts-ignore - The database description type may vary slightly from the static object */}
               {allPhotos[currentSlideIndex]?.description ? (

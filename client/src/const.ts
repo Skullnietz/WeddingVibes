@@ -5,7 +5,7 @@ export const APP_TITLE = import.meta.env.VITE_APP_TITLE || "App";
 export const APP_LOGO = "https://placehold.co/128x128/6B4C9A/F5F1E8?text=M%26G";
 
 // Generate login URL at runtime so redirect URI reflects the current origin.
-export const WEDDING_HASHTAG = "#MiriamGonzaloBoda2025";
+export const WEDDING_HASHTAG = "#MiriamGonzaloCelebracion2026";
 
 export const getLoginUrl = () => {
   // Hardcoded because Vite strips out non-VITE_ variables during Hostinger build

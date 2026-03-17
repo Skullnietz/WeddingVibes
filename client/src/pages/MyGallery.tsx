@@ -154,7 +154,7 @@ export default function MyGallery() {
         const formData = new FormData();
         formData.append("photo", selectedFile);
         formData.append("userId", user.id.toString());
-        formData.append("title", "Recuerdo de la Boda");
+        formData.append("title", "Recuerdo de la Celebración");
 
         try {
             const res = await fetch("/api/photos/upload", {
@@ -199,8 +199,8 @@ export default function MyGallery() {
                     </h2>
                     <p className="text-muted-foreground font-sans mb-8">
                         {hasRsvped && !isAttending
-                            ? "Como nos indicaste que no podrás acompañarnos en la boda, la galería privada y mesa de regalos están deshabilitadas. Si cambias de opinión, puedes actualizar tu confirmación."
-                            : "Para poder acceder a tu Galería Privada y a la Mesa de Regalos interactiva, primero debes confirmar tu asistencia a la boda. ¡Nos encantaría contar contigo!"}
+                            ? "Como nos indicaste que no podrás acompañarnos en la celebración, la galería privada y mesa de regalos están deshabilitadas. Si cambias de opinión, puedes actualizar tu confirmación."
+                            : "Para poder acceder a tu Galería Privada y a la Mesa de Regalos interactiva, primero debes confirmar tu asistencia a la celebración. ¡Nos encantaría contar contigo!"}
                     </p>
                     <Button
                         size="lg"
@@ -285,7 +285,7 @@ export default function MyGallery() {
                                 </h3>
                                 <p className="text-muted-foreground text-[15px] leading-relaxed">
                                     {tourStep === 1 && "¡Hola! Si lo deseas, puedes elegir uno de los obsequios de nuestra mesa de regalos. Es totalmente opcional, pero agradecemos muchísimo cualquier lindo detalle."}
-                                    {tourStep === 2 && "¡Queremos ver la boda desde tus ojos! En esta sección podrás subir todas las increíbles fotografías que captures durante nuestro evento."}
+                                    {tourStep === 2 && "¡Queremos ver la celebración desde tus ojos! En esta sección podrás subir todas las increíbles fotografías que captures durante nuestro evento."}
                                     {tourStep === 3 && "Aquí aparecerán todas las fotos que hayas subido. Podrás ver y revisar el estado de cada una, ya sea que han sido 'aprobadas' o 'pendientes'."}
                                 </p>
                             </div>
@@ -459,7 +459,7 @@ export default function MyGallery() {
                     <div>
                         <h1 className="font-serif text-3xl font-bold text-primary mb-2">Mi Galería</h1>
                         <p className="text-muted-foreground font-sans">
-                            Sube tus fotos de la boda. Una vez aprobadas, aparecerán en la galería oficial.
+                            Sube tus fotos de la celebración. Una vez aprobadas, aparecerán en la galería oficial.
                         </p>
                     </div>
                     {user?.role === 'admin' && (
