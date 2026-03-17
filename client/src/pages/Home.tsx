@@ -307,10 +307,10 @@ function DetailsSection() {
             transition={{ duration: 0.8 }}
           >
             <Card className="border-primary/20 hover:border-primary/50 transition-all duration-300 h-full bg-white/50 backdrop-blur-sm shadow-sm hover:shadow-md overflow-hidden">
-              <div className="grid md:grid-cols-[1fr_1fr] lg:grid-cols-[1.2fr_1fr] h-full">
-                {/* Info + Map */}
-                <div className="p-8 md:p-10 flex flex-col h-full">
-                  <div className="flex items-center gap-4 mb-8">
+              <div className="grid md:grid-cols-[1fr_1.2fr] h-full">
+                {/* Info Left */}
+                <div className="p-8 md:p-10 flex flex-col justify-center border-b md:border-b-0 md:border-r border-primary/10">
+                  <div className="flex items-center gap-4 mb-10">
                     <div className="flex -space-x-3">
                       <div className="w-14 h-14 rounded-full bg-primary/10 border-2 border-background flex items-center justify-center z-10">
                         <Clock className="text-primary" size={24} />
@@ -324,7 +324,7 @@ function DetailsSection() {
                     </h3>
                   </div>
                   
-                  <div className="grid xl:grid-cols-2 gap-8 mb-8 flex-shrink-0">
+                  <div className="space-y-8">
                     <div>
                       <h4 className="font-sans text-xs font-semibold tracking-widest text-muted-foreground uppercase mb-2">Horario</h4>
                       <p className="font-medium text-xl text-foreground">
@@ -333,12 +333,11 @@ function DetailsSection() {
                     </div>
                     <div>
                       <h4 className="font-sans text-xs font-semibold tracking-widest text-muted-foreground uppercase mb-2">Ubicación</h4>
-                      <p className="text-foreground leading-relaxed text-sm md:text-base mb-4">
+                      <p className="text-foreground leading-relaxed text-base mb-5">
                         {WEDDING_DATA.venue}
                       </p>
                       <Button
                         variant="outline"
-                        size="sm"
                         className="w-full sm:w-auto font-sans border-primary/20 text-primary hover:bg-primary/5 gap-2"
                         onClick={() => window.open("https://maps.app.goo.gl/NAasZfktPXk9bHEj9", "_blank")}
                       >
@@ -347,9 +346,23 @@ function DetailsSection() {
                       </Button>
                     </div>
                   </div>
-                  
+                </div>
+
+                {/* Photo & Map Right */}
+                <div className="p-8 md:p-10 flex flex-col gap-6 bg-white/30 backdrop-blur-sm">
+                  {/* Elegant Framed Photo */}
+                  <div className="relative w-full max-w-sm mx-auto aspect-video rounded-xl overflow-hidden shadow-md border-4 border-white transform rotate-1 hover:rotate-0 transition-transform duration-500">
+                    <img
+                      src="/venue.jpg"
+                      alt="Lugar de la celebración"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-xl pointer-events-none" />
+                  </div>
+
                   {/* Map */}
-                  <div className="h-48 md:h-64 mt-auto w-full rounded-xl overflow-hidden shadow-inner border border-primary/10">
+                  <div className="h-56 mt-auto w-full rounded-xl overflow-hidden shadow-inner border border-primary/10">
                     <iframe
                       src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d279.55503755356517!2d-99.2205259534516!3d19.488769757923713!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTnCsDI5JzE5LjgiTiA5OcKwMTMnMTMuNyJX!5e0!3m2!1ses!2smx!4v1773708086956!5m2!1ses!2smx"
                       width="100%"
@@ -359,22 +372,6 @@ function DetailsSection() {
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
                     ></iframe>
-                  </div>
-                </div>
-
-                {/* Venue Photo Column */}
-                <div className="relative w-full h-80 md:h-auto min-h-[300px] overflow-hidden order-first md:order-last border-b md:border-b-0 md:border-l border-primary/10">
-                  <img
-                    src="/venue.jpg"
-                    alt="Lugar de la celebración"
-                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-105 object-center"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
-                  <div className="absolute bottom-6 left-6 right-6 text-center md:text-right">
-                    <h3 className="font-serif text-2xl lg:text-3xl font-semibold text-white drop-shadow-lg mb-2">
-                      Lugar de la Celebración
-                    </h3>
                   </div>
                 </div>
               </div>
