@@ -919,7 +919,7 @@ function GiftsSection() {
     {
       icon: Heart,
       title: "Transferencia Bancaria",
-      description: "CLABE: 638180000187556691",
+      description: "Cuenta NU | CLABE: 638180000187556691",
       link: "#",
     },
   ];
