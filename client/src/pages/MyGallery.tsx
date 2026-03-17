@@ -432,13 +432,7 @@ export default function MyGallery() {
                                             <p className="text-muted-foreground font-sans mb-4">Si prefieres hacernos un obsequio en efectivo, aquí tienes nuestros datos bancarios:</p>
                                             <div className="bg-white p-4 rounded-lg shadow-inner space-y-3 relative">
                                                 <div className="flex items-center justify-between gap-4">
-                                                    <p className="font-sans text-sm flex-1"><span className="font-semibold text-foreground">Banco:</span> BBVA</p>
-                                                </div>
-                                                <div className="flex items-center justify-between gap-4">
-                                                    <p className="font-sans text-sm flex-1"><span className="font-semibold text-foreground">Cuenta:</span> 123456789</p>
-                                                    <Button variant="ghost" size="sm" className="h-8 shadow-sm border border-border/50 text-xs px-2 shrink-0" onClick={() => { navigator.clipboard.writeText("123456789"); toast.success("Cuenta copiada al portapapeles"); }}>
-                                                        <Copy size={14} className="mr-1" /> Copiar
-                                                    </Button>
+                                                    <p className="font-sans text-sm flex-1"><span className="font-semibold text-foreground">Banco:</span> NU</p>
                                                 </div>
                                                 <div className="flex items-center justify-between gap-4">
                                                     <p className="font-sans text-sm flex-1"><span className="font-semibold text-foreground">CLABE:</span> 638180000187556691</p>
