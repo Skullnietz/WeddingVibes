@@ -441,8 +441,8 @@ export default function MyGallery() {
                                                     </Button>
                                                 </div>
                                                 <div className="flex items-center justify-between gap-4">
-                                                    <p className="font-sans text-sm flex-1"><span className="font-semibold text-foreground">CLABE:</span> 002180000000123456789</p>
-                                                    <Button variant="ghost" size="sm" className="h-8 shadow-sm border border-border/50 text-xs px-2 shrink-0" onClick={() => { navigator.clipboard.writeText("002180000000123456789"); toast.success("CLABE copiada al portapapeles"); }}>
+                                                    <p className="font-sans text-sm flex-1"><span className="font-semibold text-foreground">CLABE:</span> 638180000187556691</p>
+                                                    <Button variant="ghost" size="sm" className="h-8 shadow-sm border border-border/50 text-xs px-2 shrink-0" onClick={() => { navigator.clipboard.writeText("638180000187556691"); toast.success("CLABE copiada al portapapeles"); }}>
                                                         <Copy size={14} className="mr-1" /> Copiar
                                                     </Button>
                                                 </div>
