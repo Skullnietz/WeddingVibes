@@ -345,16 +345,26 @@ function DetailsSection() {
                     </div>
                   </div>
                 </div>
-                <div className="h-64 md:h-full min-h-[300px] w-full rounded-xl overflow-hidden shadow-inner border border-primary/10">
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d279.55503755356517!2d-99.2205259534516!3d19.488769757923713!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTnCsDI5JzE5LjgiTiA5OcKwMTMnMTMuNyJX!5e0!3m2!1ses!2smx!4v1773708086956!5m2!1ses!2smx"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  ></iframe>
+                <div className="flex flex-col gap-4 h-full min-h-[300px]">
+                  <div className="flex-1 rounded-xl overflow-hidden shadow-inner border border-primary/10">
+                    <img
+                      src="/venue.jpg"
+                      alt="Lugar de la celebración"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="flex-1 rounded-xl overflow-hidden shadow-inner border border-primary/10 min-h-[250px]">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d279.55503755356517!2d-99.2205259534516!3d19.488769757923713!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTnCsDI5JzE5LjgiTiA5OcKwMTMnMTMuNyJX!5e0!3m2!1ses!2smx!4v1773708086956!5m2!1ses!2smx"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                  </div>
                 </div>
               </div>
             </Card>
