@@ -465,7 +465,6 @@ function DetailsSection() {
             <div className="space-y-6">
               {[
                 { time: "13:30", event: "RECEPCIÓN" },
-                { time: "14:00", event: "CEREMONIA CIVIL" },
                 { time: "14:30", event: "CEREMONIA" },
                 { time: "15:00", event: "BRINDIS" },
                 { time: "16:30", event: "COMIDA" },
@@ -966,26 +965,6 @@ function FAQSection() {
     {
       question: "¿Pueden asistir niños?",
       answer: "Sí, los niños son bienvenidos.",
-    },
-    {
-      question: "¿Hay estacionamiento?",
-      answer: (
-        <div className="space-y-2">
-          <p>Sí, aunque el venue no cuenta con estacionamiento privado, proporcionaremos opciones cercanas:</p>
-          <ul className="list-disc list-inside space-y-1">
-            <li>
-              <a href="https://maps.app.goo.gl/NAasZfktPXk9bHEj9" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                Estacionamiento Público (Ejemplo 1)
-              </a>
-            </li>
-            <li>
-              <a href="https://maps.app.goo.gl/NAasZfktPXk9bHEj9" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                Estacionamiento Cercano (Ejemplo 2)
-              </a>
-            </li>
-          </ul>
-        </div>
-      ),
     },
   ];
 
