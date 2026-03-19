@@ -411,19 +411,11 @@ function DetailsSection() {
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-6 bg-primary/5 p-6 md:p-8 rounded-xl border border-primary/10 h-full place-content-center">
-                  <div className="flex flex-col gap-6 justify-center">
-                    <div>
-                      <h4 className="font-sans text-xs font-semibold tracking-widest text-muted-foreground uppercase mb-2 opacity-80">Colores</h4>
-                      <p className="font-medium text-foreground leading-relaxed text-sm md:text-base">
-                        Claros (blancos, perla, champagne, crema, beige, nude, dorados o cálidos)
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="font-sans text-xs font-semibold tracking-widest text-muted-foreground uppercase mb-2 opacity-80">Consideración</h4>
-                      <p className="font-medium text-foreground leading-relaxed text-sm md:text-base">
-                        Calzado apto para jardín (evitar tacón fino)
-                      </p>
-                    </div>
+                  <div className="flex flex-col justify-center">
+                    <h4 className="font-sans text-xs font-semibold tracking-widest text-muted-foreground uppercase mb-3 opacity-80">Colores</h4>
+                    <p className="font-medium text-foreground leading-relaxed text-base md:text-lg">
+                      Claros (blancos, perla, champagne, crema, beige, nude, dorados o cálidos)
+                    </p>
                   </div>
                   <div className="relative rounded-lg overflow-hidden border border-primary/20 shadow-md">
                     <img
